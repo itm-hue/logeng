@@ -849,6 +849,7 @@
             });
         }
 
+        // Reset form input
         function resetForm() {
             document.getElementById('logbook-form').reset();
             document.getElementById('edit-id').value = '';
@@ -1124,22 +1125,116 @@
             renderData(logbookData);
         }
 
+        // --- EXPORT TO EXCEL WITH IMAGES (SISTEM XML SPREADSHEET HTML) ---
         function exportToExcel() {
-            let csv = "\uFEFFID;Tanggal;Shift;Teknisi;Bidang;Kategori;Area;Detail;Status\r\n";
-            logbookData.forEach(i => { csv += `"${i.id}";"${i.tanggal}";"${i.shift}";"${i.teknisi}";"${i.specialty}";"${i.category}";"${i.area}";"${i.detail}";"${i.status}"\r\n`; });
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
-            link.setAttribute("download", "Logbook_Engineering.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link);
-        }
+            if (currentRole !== 'admin') {
+                showAlert('Hanya Administrator yang diperbolehkan mengekspor data!', 'error');
+                return;
+            }
 
-        function showAlert(msg, type) {
-            const box = document.getElementById('alert-box');
-            document.getElementById('alert-message').innerText = msg;
-            box.className = `mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-sm ${type==='success'?'bg-emerald-50 text-emerald-800 border-emerald-200':type==='error'?'bg-red-50 text-red-800 border-red-200':'bg-indigo-50 text-indigo-800 border-indigo-200'}`;
-            box.classList.remove('hidden');
-            setTimeout(() => box.classList.add('hidden'), 5000);
+            // Kerangka Dokumen Excel Berbasis HTML agar mendukung rendering gambar di dalam sel tabel
+            let excelTemplate = `
+                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+                <head>
+                    <meta charset="utf-8">
+                    <!--[if gte mso 9]>
+                    <xml>
+                        <x:ExcelWorkbook>
+                            <x:ExcelWorksheets>
+                                <x:ExcelWorksheet>
+                                    <x:Name>Logbook Engineering</x:Name>
+                                    <x:WorksheetOptions>
+                                        <x:DisplayGridlines/>
+                                    </x:WorksheetOptions>
+                                </x:ExcelWorksheet>
+                            </x:ExcelWorksheets>
+                        </x:ExcelWorkbook>
+                    </xml>
+                    <![endif]-->
+                    <style>
+                        table { border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; }
+                        th { background-color: #4f46e5; color: white; font-weight: bold; border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+                        td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
+                    </style>
+                </head>
+                <body>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tanggal</th>
+                                <th>Shift</th>
+                                <th>Teknisi</th>
+                                <th>Bidang Spesialis</th>
+                                <th>Jenis Pemeliharaan</th>
+                                <th>Kategori</th>
+                                <th>Area / Lokasi</th>
+                                <th>Detail Pekerjaan</th>
+                                <th>Jam Mulai</th>
+                                <th>Jam Selesai</th>
+                                <th>Status</th>
+                                <th>Foto Lampiran (Maks 3)</th>
+                                <th>Catatan Admin</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+
+            // Susun baris logbook pekerjaan dengan merender tag <img src="base64...">
+            logbookData.forEach(item => {
+                let pList = [];
+                if (item.photos) {
+                    try {
+                        pList = JSON.parse(item.photos);
+                    } catch(e) {
+                        pList = [];
+                    }
+                }
+
+                // Render tag image untuk Excel dengan dimensi tetap agar pas dalam sel tabel
+                let imgTagsHtml = pList.map(b => `<img src="${b}" width="80" height="80" style="object-fit: cover; border: 1px solid #cbd5e1; margin-right: 5px; border-radius: 4px;" />`).join('');
+
+                excelTemplate += `
+                    <tr>
+                        <td>${item.id || ''}</td>
+                        <td>${item.tanggal || ''}</td>
+                        <td>${item.shift || ''}</td>
+                        <td>${item.teknisi || ''}</td>
+                        <td>${item.specialty || ''}</td>
+                        <td>${item.maintenance_type || ''}</td>
+                        <td>${item.category || ''}</td>
+                        <td>${item.area || ''}</td>
+                        <td>${item.detail || ''}</td>
+                        <td>${item.time_start || ''}</td>
+                        <td>${item.time_finish || ''}</td>
+                        <td>${item.status || ''}</td>
+                        <td>${imgTagsHtml}</td>
+                        <td>${item.admin_notes || ''}</td>
+                    </tr>
+                `;
+            });
+
+            excelTemplate += `
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `;
+
+            // Ekspor dengan tipe MIME excel (.xls)
+            const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            
+            const today = new Date();
+            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            link.setAttribute("download", `Logbook_Engineering_${dateStr}.xls`);
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showAlert('Data logbook berhasil diekspor ke Excel beserta fotonya!', 'success');
         }
-        function closeAlert() { document.getElementById('alert-box').classList.add('hidden'); }
     </script>
 </body>
 </html>
