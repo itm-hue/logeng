@@ -558,12 +558,18 @@
             // SENSOR OTOMATIS LINK PARAMETER (?api=...)
             const urlParams = new URLSearchParams(window.location.search);
             const apiParam = urlParams.get('api');
+            const viewParam = urlParams.get('view');
             
             if (apiParam && apiParam.startsWith('https://script.google.com/')) {
                 googleSheetsURL = apiParam.trim();
                 localStorage.setItem('he_sheets_url', googleSheetsURL);
                 window.history.replaceState({}, document.title, window.location.pathname);
                 showAlert('Database terhubung otomatis via Link khusus!', 'success');
+            }
+
+            if (viewParam) {
+                // Simpan ID yang dicari ke sessionStorage agar langsung difilter setelah login berhasil
+                sessionStorage.setItem('pending_view_id', viewParam);
             }
 
             if (googleSheetsURL) {
@@ -663,7 +669,21 @@
             switchTab('logbook');
             showSection('dashboard');
             document.getElementById('login-form').reset();
-            renderData();
+            
+            // Proses deep linking jika sebelumnya ada parameter ?view=ID
+            const pendingViewId = sessionStorage.getItem('pending_view_id');
+            if (pendingViewId) {
+                sessionStorage.removeItem('pending_view_id');
+                // Hapus pencarian default dan isi pencarian dengan ID logbook target
+                document.getElementById('filter-search').value = pendingViewId;
+                applyFilters();
+                // Gulirkan layar dengan halus ke area tabel riwayat
+                setTimeout(() => {
+                    document.getElementById('history-container-col').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            } else {
+                renderData();
+            }
         }
 
         function logout() {
@@ -795,7 +815,7 @@
                 timestamp: new Date().toLocaleString('id-ID'),
                 tanggal, specialty, maintenance_type: maintenanceType, category, area, detail, shift, status,
                 time_start: timeStart, time_finish: timeFinish, admin_notes: adminNotes,
-                photos: JSON.stringify(selectedPhotosBase64)
+                photos: [...selectedPhotosBase64] // Simpan sebagai array murni
             };
 
             if (editId) {
@@ -833,7 +853,14 @@
             document.getElementById('job-time-finish').value = log.time_finish || '';
             document.getElementById('job-admin-notes').value = log.admin_notes || '';
 
-            try { selectedPhotosBase64 = JSON.parse(log.photos) || []; } catch(e) { selectedPhotosBase64 = []; }
+            // Penyelarasan format Array foto
+            if (Array.isArray(log.photos)) {
+                selectedPhotosBase64 = [...log.photos];
+            } else if (typeof log.photos === 'string') {
+                try { selectedPhotosBase64 = JSON.parse(log.photos) || []; } catch(e) { selectedPhotosBase64 = []; }
+            } else {
+                selectedPhotosBase64 = [];
+            }
             renderPhotoPreviews();
 
             document.getElementById('btn-cancel').classList.remove('hidden');
@@ -875,10 +902,18 @@
             document.getElementById('alert-debug').classList.add('hidden');
 
             try {
+                // Pastikan format foto sebelum dikirim ter-stringifikasi
+                const formattedLogbook = logbookData.map(item => {
+                    return {
+                        ...item,
+                        photos: Array.isArray(item.photos) ? JSON.stringify(item.photos) : (item.photos || '[]')
+                    };
+                });
+
                 // Konversi data JSON menjadi string teks terlebih dahulu
                 const payloadStr = JSON.stringify({
                     action: 'syncFull',
-                    logbook: logbookData,
+                    logbook: formattedLogbook,
                     users: usersData
                 });
 
@@ -1045,15 +1080,23 @@
             const mobileContainer = document.getElementById('log-cards-mobile');
             tbody.innerHTML = ''; mobileContainer.innerHTML = '';
 
+            // Pembersihan tipe data photos sebelum render harian
+            logbookData = logbookData.map(item => {
+                if (typeof item.photos === 'string') {
+                    try { item.photos = JSON.parse(item.photos); } catch(e) { item.photos = []; }
+                }
+                if (!Array.isArray(item.photos)) {
+                    item.photos = [];
+                }
+                return item;
+            });
+
             if (logbookData.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
             } else {
                 document.getElementById('empty-state').classList.add('hidden');
                 logbookData.forEach(item => {
-                    let pList = []; 
-                    if (item.photos) {
-                        try { pList = JSON.parse(item.photos); } catch(e) { pList = []; }
-                    }
+                    let pList = item.photos || [];
                     let pGHtml = pList.map(b => `<img src="${b}" onclick="openLightbox('${b}')" class="w-10 h-10 object-cover border rounded-lg cursor-pointer transform hover:scale-105 transition shadow-sm">`).join(' ');
 
                     tbody.innerHTML += `
@@ -1108,7 +1151,8 @@
                 const matchesSearch = item.area.toLowerCase().includes(searchQuery) || 
                                       item.detail.toLowerCase().includes(searchQuery) ||
                                       item.teknisi.toLowerCase().includes(searchQuery) ||
-                                      (item.specialty && item.specialty.toLowerCase().includes(searchQuery));
+                                      (item.specialty && item.specialty.toLowerCase().includes(searchQuery)) ||
+                                      item.id.toLowerCase() === searchQuery;
                 const matchesCategory = categoryQuery === "" || item.category === categoryQuery;
                 const matchesStatus = statusQuery === "" || item.status === statusQuery;
 
@@ -1125,14 +1169,28 @@
             renderData(logbookData);
         }
 
-        // --- EXPORT TO EXCEL WITH IMAGES (SISTEM XML SPREADSHEET HTML) ---
+        // Fungsi pembersih karakter berbahaya XML untuk Microsoft Excel
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.toString()
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // --- EXPORT TO EXCEL DENGAN LINK FOTO INTERAKTIF (AMBIL DATA STABIL TANPA HILANG KOLOM) ---
         function exportToExcel() {
             if (currentRole !== 'admin') {
                 showAlert('Hanya Administrator yang diperbolehkan mengekspor data!', 'error');
                 return;
             }
 
-            // Kerangka Dokumen Excel Berbasis HTML agar mendukung rendering gambar di dalam sel tabel
+            // Dapatkan URL induk web harian untuk deep-link foto
+            const appBaseUrl = window.location.origin + window.location.pathname;
+
+            // Template Rich Table HTML untuk Microsoft Excel / WPS Office
             let excelTemplate = `
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
@@ -1161,7 +1219,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>ID Pekerjaan</th>
                                 <th>Tanggal</th>
                                 <th>Shift</th>
                                 <th>Teknisi</th>
@@ -1173,43 +1231,46 @@
                                 <th>Jam Mulai</th>
                                 <th>Jam Selesai</th>
                                 <th>Status</th>
-                                <th>Foto Lampiran (Maks 3)</th>
+                                <th>Tautan Lampiran Foto (Aman & Ringan)</th>
                                 <th>Catatan Admin</th>
                             </tr>
                         </thead>
                         <tbody>
             `;
 
-            // Susun baris logbook pekerjaan dengan merender tag <img src="base64...">
             logbookData.forEach(item => {
                 let pList = [];
                 if (item.photos) {
-                    try {
-                        pList = JSON.parse(item.photos);
-                    } catch(e) {
-                        pList = [];
+                    if (Array.isArray(item.photos)) {
+                        pList = item.photos;
+                    } else if (typeof item.photos === 'string') {
+                        try { pList = JSON.parse(item.photos) || []; } catch(e) { pList = []; }
                     }
                 }
 
-                // Render tag image untuk Excel dengan dimensi tetap agar pas dalam sel tabel
-                let imgTagsHtml = pList.map(b => `<img src="${b}" width="80" height="80" style="object-fit: cover; border: 1px solid #cbd5e1; margin-right: 5px; border-radius: 4px;" />`).join('');
+                // Buat tautan deep-link interaktif unik per pekerjaan
+                const deepLinkUrl = `${appBaseUrl}?view=${item.id}`;
+                const linkLabel = pList.length > 0 ? `Buka Foto (${pList.length} Foto)` : 'Tidak Ada Foto';
+                const linkHtml = pList.length > 0 
+                    ? `<a href="${deepLinkUrl}" style="color: #4f46e5; font-weight: bold; text-decoration: underline;">${linkLabel}</a>` 
+                    : '<span style="color: #94a3b8;">Tidak Ada Foto</span>';
 
                 excelTemplate += `
                     <tr>
-                        <td>${item.id || ''}</td>
-                        <td>${item.tanggal || ''}</td>
-                        <td>${item.shift || ''}</td>
-                        <td>${item.teknisi || ''}</td>
-                        <td>${item.specialty || ''}</td>
-                        <td>${item.maintenance_type || ''}</td>
-                        <td>${item.category || ''}</td>
-                        <td>${item.area || ''}</td>
-                        <td>${item.detail || ''}</td>
-                        <td>${item.time_start || ''}</td>
-                        <td>${item.time_finish || ''}</td>
-                        <td>${item.status || ''}</td>
-                        <td>${imgTagsHtml}</td>
-                        <td>${item.admin_notes || ''}</td>
+                        <td style="mso-number-format:'\\@';">${escapeHTML(item.id)}</td>
+                        <td>${escapeHTML(item.tanggal)}</td>
+                        <td>${escapeHTML(item.shift)}</td>
+                        <td>${escapeHTML(item.teknisi)}</td>
+                        <td>${escapeHTML(item.specialty)}</td>
+                        <td>${escapeHTML(item.maintenance_type)}</td>
+                        <td>${escapeHTML(item.category)}</td>
+                        <td>${escapeHTML(item.area)}</td>
+                        <td>${escapeHTML(item.detail)}</td>
+                        <td>${escapeHTML(item.time_start)}</td>
+                        <td>${escapeHTML(item.time_finish)}</td>
+                        <td>${escapeHTML(item.status)}</td>
+                        <td>${linkHtml}</td>
+                        <td>${escapeHTML(item.admin_notes)}</td>
                     </tr>
                 `;
             });
@@ -1221,7 +1282,7 @@
                 </html>
             `;
 
-            // Ekspor dengan tipe MIME excel (.xls)
+            // Ekspor file ke tipe MIME Excel XLS
             const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
@@ -1233,7 +1294,7 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showAlert('Data logbook berhasil diekspor ke Excel beserta fotonya!', 'success');
+            showAlert('Laporan berhasil diekspor ke Excel dengan Tautan Foto Aman!', 'success');
         }
     </script>
 </body>
