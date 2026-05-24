@@ -118,7 +118,7 @@
                             <input type="password" id="login-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-medium" required>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg flex items-center justify-center space-x-2 active:scale-95">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg flex items-center justify-center space-x-2 active:scale-95 transform">
                         <span>Masuk Aplikasi</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
@@ -183,7 +183,8 @@
                                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                             <i data-lucide="calendar" class="w-4 h-4"></i>
                                         </span>
-                                        <input type="date" id="job-date" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed text-sm focus:outline-none font-semibold" readonly>
+                                        <!-- DIPERBAIKI: Menggunakan pointer-events-none, tabindex, dan event prevention agar 100% read-only di semua perangkat HP -->
+                                        <input type="date" id="job-date" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed text-sm focus:outline-none font-semibold pointer-events-none" readonly tabindex="-1" onclick="event.preventDefault(); return false;" onfocus="this.blur();">
                                     </div>
                                 </div>
 
@@ -300,9 +301,10 @@
                                     <button type="button" id="btn-cancel" onclick="resetForm()" class="hidden flex-1 bg-slate-100 py-3.5 rounded-xl font-bold transition duration-200 text-xs">
                                         Batal
                                     </button>
+                                    <!-- DIPERBAIKI: Mengubah nama label tombol menjadi "Pekerjaan Selesai" -->
                                     <button type="submit" id="btn-submit" class="flex-2 w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg text-xs flex items-center justify-center space-x-2 active:scale-95 transform">
                                         <i data-lucide="save" class="w-4 h-4"></i>
-                                        <span>Simpan Logbook</span>
+                                        <span>Pekerjaan Selesai</span>
                                     </button>
                                 </div>
                             </form>
@@ -382,7 +384,7 @@
                                             <th class="py-4.5 px-6">Kategori / Lokasi</th>
                                             <th class="py-4.5 px-6">Detail Pekerjaan / Lampiran</th>
                                             <th class="py-4.5 px-6 text-center">Status</th>
-                                            <th id="th-actions" class="py-4.5 px-6 text-right">Aksi</th>
+                                            <th class="py-4.5 px-6 text-right">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="log-table-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-600"></tbody>
@@ -535,13 +537,6 @@
 
     <!-- APP BUSINESS LOGIC -->
     <script>
-        let currentRole = null;
-        let currentUserName = null;
-        let activeCategory = '';
-        let googleSheetsURL = localStorage.getItem('he_sheets_url') || '';
-        let selectedPhotosBase64 = [];
-        let onConfirmCallback = null;
-
         // DB lokal cadangan
         let usersData = JSON.parse(localStorage.getItem('he_users_local')) || [
             { username: 'admin', name: 'Chief Engineering (Admin)', role: 'admin', password: 'admin123' },
@@ -550,6 +545,42 @@
         ];
 
         let logbookData = JSON.parse(localStorage.getItem('he_logbook_local')) || [];
+        let currentRole = null;
+        let currentUserName = null;
+        let activeCategory = '';
+        let googleSheetsURL = localStorage.getItem('he_sheets_url') || '';
+        let selectedPhotosBase64 = [];
+        let onConfirmCallback = null;
+
+        // --- GLOBAL UTILITY FUNCTIONS (Diletakkan di bagian paling atas agar terhindar dari Hoisting Error) ---
+        function showAlert(msg, type) {
+            const box = document.getElementById('alert-box');
+            document.getElementById('alert-message').innerText = msg;
+            box.className = `mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-sm ${
+                type === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 
+                type === 'error' ? 'bg-red-50 text-red-800 border-red-200' : 
+                'bg-indigo-50 text-indigo-800 border-indigo-200'
+            }`;
+            box.classList.remove('hidden');
+            setTimeout(() => box.classList.add('hidden'), 5000);
+        }
+
+        function closeAlert() { 
+            document.getElementById('alert-box').classList.add('hidden'); 
+            document.getElementById('alert-debug').classList.add('hidden');
+        }
+
+        function updateSyncStatusUI(isS) {
+            const statusText = document.getElementById('stat-sync');
+            if (statusText) {
+                statusText.innerText = isS ? "Cloud" : "Lokal";
+                statusText.className = isS ? "text-xs font-extrabold text-emerald-600" : "text-xs font-extrabold text-amber-600";
+            }
+            const bannerStatus = document.getElementById('banner-status-text');
+            if (bannerStatus) {
+                bannerStatus.innerText = isS ? "Aplikasi Anda terhubung ke Google Sheets pusat." : "Aplikasi berjalan offline. Hubungkan ke Google Sheets untuk menyinkronkan data.";
+            }
+        }
 
         window.onload = function() {
             lucide.createIcons();
@@ -568,7 +599,6 @@
             }
 
             if (viewParam) {
-                // Simpan ID yang dicari ke sessionStorage agar langsung difilter setelah login berhasil
                 sessionStorage.setItem('pending_view_id', viewParam);
             }
 
@@ -598,13 +628,35 @@
             }
         }
 
+        function showConfirmModal(title, message, callback) {
+            document.getElementById('confirm-title').innerText = title;
+            document.getElementById('confirm-message').innerText = message;
+            onConfirmCallback = callback;
+            document.getElementById('confirm-modal').classList.remove('hidden');
+            
+            const yesBtn = document.getElementById('btn-confirm-yes');
+            yesBtn.onclick = function() {
+                closeConfirmModal(true);
+            };
+        }
+
+        function closeConfirmModal(confirmed) {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            if (confirmed && typeof onConfirmCallback === 'function') {
+                onConfirmCallback();
+            }
+            onConfirmCallback = null;
+        }
+
         // Penanganan Login
         function handleLogin(e) {
             e.preventDefault();
             const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
             const passwordInput = document.getElementById('login-password').value;
 
-            const user = usersData.find(u => u.username === usernameInput);
+            // Membaca ulang usersData ter-update dari localStorage untuk menjamin user baru yang baru didaftarkan bisa langsung login
+            const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
+            const user = activeUsers.find(u => u.username === usernameInput);
 
             if (user && user.password === passwordInput) {
                 applyUserSession(user.role, user.name);
@@ -650,14 +702,11 @@
             showSection('dashboard');
             document.getElementById('login-form').reset();
             
-            // Proses deep linking jika sebelumnya ada parameter ?view=ID
             const pendingViewId = sessionStorage.getItem('pending_view_id');
             if (pendingViewId) {
                 sessionStorage.removeItem('pending_view_id');
-                // Hapus pencarian default dan isi pencarian dengan ID logbook target
                 document.getElementById('filter-search').value = pendingViewId;
                 applyFilters();
-                // Gulirkan layar dengan halus ke area tabel riwayat
                 setTimeout(() => {
                     document.getElementById('history-container-col').scrollIntoView({ behavior: 'smooth' });
                 }, 500);
@@ -790,12 +839,34 @@
                 return;
             }
 
+            // DIPERBAIKI: Logika deteksi perubahan teknisi pengerjaan saat mengedit data Pending milik user lain
+            let originalTeknisi = currentUserName;
+            if (editId) {
+                const idx = logbookData.findIndex(item => item.id === editId);
+                if (idx !== -1) {
+                    let rawTeknisi = logbookData[idx].teknisi || currentUserName;
+                    // Bersihkan tanda "Diedit" lama untuk mendapatkan nama teknisi asli pembuat logbook pertama kali
+                    const editIndex = rawTeknisi.indexOf(" (Diedit");
+                    if (editIndex !== -1) {
+                        rawTeknisi = rawTeknisi.substring(0, editIndex);
+                    }
+                    originalTeknisi = rawTeknisi;
+                }
+            }
+
+            // Jika yang menyimpan berbeda dari teknisi pertama, catat keterangannya
+            let finalTeknisiValue = originalTeknisi;
+            if (originalTeknisi !== currentUserName) {
+                finalTeknisiValue = `${originalTeknisi} (Diedit oleh: ${currentUserName})`;
+            }
+
             const job = {
                 id: editId || String(Date.now()),
                 timestamp: new Date().toLocaleString('id-ID'),
                 tanggal, specialty, maintenance_type: maintenanceType, category, area, detail, shift, status,
                 time_start: timeStart, time_finish: timeFinish, admin_notes: adminNotes,
-                photos: [...selectedPhotosBase64] // Simpan sebagai array murni
+                photos: [...selectedPhotosBase64], // Simpan sebagai array murni
+                teknisi: finalTeknisiValue
             };
 
             if (editId) {
@@ -806,17 +877,31 @@
             }
 
             localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
-            showAlert('Data tersimpan di HP lokal! Menyinkronkan...', 'info');
+            showAlert('Data tersimpan lokal di HP!', 'success');
             resetForm();
             renderData();
 
-            if (googleSheetsURL) syncDataWithSheets();
+            // Jalankan sinkronisasi secara non-silent (dengan animasi progres loading) jika terkoneksi ke Google Sheets
+            if (googleSheetsURL) {
+                syncDataWithSheets(false);
+            }
         }
 
+        // DIPERBAIKI: Memberikan izin edit kepada user biasa khusus untuk pekerjaan yang masih berstatus "Pending"
         function prepareEdit(id) {
             const log = logbookData.find(item => item.id === id); if (!log) return;
-            if (currentRole !== 'admin') return;
+            
+            // Periksa izin edit: admin bisa mengedit semuanya, teknisi biasa hanya boleh mengedit jika status "Pending"
+            if (currentRole !== 'admin' && log.status !== 'Selesai' && log.status !== 'Pending') {
+                showAlert('Hanya pekerjaan berstatus Pending yang dapat diedit oleh Teknisi!', 'error');
+                return;
+            }
+            if (currentRole !== 'admin' && log.status === 'Selesai') {
+                showAlert('Pekerjaan yang telah Selesai hanya dapat diedit oleh Administrator!', 'error');
+                return;
+            }
 
+            // Membuka form input agar bisa diedit di HP
             document.getElementById('input-container-col').classList.remove('hidden');
             document.getElementById('history-container-col').className = "lg:col-span-2 space-y-6";
 
@@ -844,6 +929,16 @@
             renderPhotoPreviews();
 
             document.getElementById('btn-cancel').classList.remove('hidden');
+            
+            // Beri notifikasi info jika teknisi pengubah berbeda dari teknisi pembuat harian pertama
+            let originalTeknisi = log.teknisi || "";
+            const editIndex = originalTeknisi.indexOf(" (Diedit");
+            if (editIndex !== -1) {
+                originalTeknisi = originalTeknisi.substring(0, editIndex);
+            }
+            if (originalTeknisi && originalTeknisi !== currentUserName) {
+                showAlert(`Info: Pekerjaan ini milik ${originalTeknisi}. Nama Anda akan dicatat sebagai pengubah terakhir saat disimpan kembali.`, 'info');
+            }
         }
 
         function deletePekerjaan(id) {
@@ -852,7 +947,7 @@
                 logbookData = logbookData.filter(item => item.id !== id);
                 localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
                 renderData();
-                if (googleSheetsURL) syncDataWithSheets();
+                if (googleSheetsURL) syncDataWithSheets(true);
             });
         }
 
@@ -872,14 +967,32 @@
         function closeLightbox() { document.getElementById('lightbox-modal').classList.add('hidden'); }
 
         // --- SISTEM SYNC TERBARU MENGGUNAKAN FORM DATA (BEBAS BLOKIR CORS) ---
-        async function syncDataWithSheets() {
+        // DIPERBAIKI: Ditambahkan indikasi visual animasi progres loading sync pada tombol Pekerjaan Selesai
+        async function syncDataWithSheets(isSilent = false) {
             if (!googleSheetsURL) {
-                showAlert('Konfigurasi URL Google Sheets belum disetel!', 'error');
+                if (!isSilent) showAlert('Konfigurasi URL Google Sheets belum disetel!', 'error');
                 return;
             }
-            showAlert('Sedang menghubungkan ke Google Sheets...', 'info');
-            document.getElementById('diagnostics-box').classList.add('hidden');
-            document.getElementById('alert-debug').classList.add('hidden');
+
+            const btnSubmit = document.getElementById('btn-submit');
+            let originalBtnHtml = "";
+            if (btnSubmit) {
+                originalBtnHtml = btnSubmit.innerHTML;
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = `
+                    <svg class="animate-spin h-4 w-4 text-white inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Mengunggah data...</span>
+                `;
+            }
+
+            if (!isSilent) {
+                showAlert('Sedang menghubungkan ke Google Sheets...', 'info');
+                document.getElementById('diagnostics-box').classList.add('hidden');
+                document.getElementById('alert-debug').classList.add('hidden');
+            }
 
             try {
                 // Pastikan format foto sebelum dikirim ter-stringifikasi
@@ -926,23 +1039,35 @@
                         });
                         localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
                     }
-                    if (res.users) {
+                    if (res.users && res.users.length > 0) {
                         usersData = res.users;
                         localStorage.setItem('he_users_local', JSON.stringify(usersData));
                     }
                     renderData();
                     updateSyncStatusUI(true);
-                    showAlert('Sinkronisasi Google Sheets Berhasil!', 'success');
+                    if (!isSilent) showAlert('Sinkronisasi Google Sheets Berhasil!', 'success');
                 } else {
-                    showAlert('Gagal menyinkronkan data: ' + res.message, 'error');
+                    if (!isSilent) showAlert('Gagal menyinkronkan data: ' + res.message, 'error');
                 }
             } catch (err) {
-                showAlert('Gagal Terhubung! Google API menolak koneksi dari HP Anda.', 'error');
-                document.getElementById('diagnostics-box').classList.remove('hidden');
-                
-                const debugBox = document.getElementById('alert-debug');
-                debugBox.innerText = `Pesan Kesalahan: ${err.message}. Pastikan URL Apps Script valid, berakhiran "/exec", dan telah dideploy untuk publik ("Siapa saja/Anyone").`;
-                debugBox.classList.remove('hidden');
+                console.error("Sync failed:", err);
+                if (!isSilent) {
+                    showAlert('Gagal Terhubung! Google Sheets menolak permintaan Anda.', 'error');
+                    document.getElementById('diagnostics-box').classList.remove('hidden');
+                    
+                    const debugBox = document.getElementById('alert-debug');
+                    debugBox.innerText = `Pesan Kesalahan: ${err.message}. Pastikan URL Apps Script valid, berakhiran "/exec", dan telah dideploy untuk publik ("Siapa saja/Anyone").`;
+                    debugBox.classList.remove('hidden');
+                } else {
+                    // Jika silent, ubah status UI menjadi lokal karena koneksi gagal tanpa mengganggu pengguna
+                    updateSyncStatusUI(false);
+                }
+            } finally {
+                // Kembalikan tampilan tombol kembali normal jika proses loading sync selesai
+                if (btnSubmit && originalBtnHtml) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = originalBtnHtml;
+                }
             }
         }
 
@@ -970,18 +1095,16 @@
                         });
                         localStorage.setItem('he_logbook_local', JSON.stringify(logbookData)); 
                     }
-                    if (res.users && res.users.length > 0) { 
+                    // PROTEKSI: Hanya overwrite usersData jika data dari spreadsheet valid dan tidak kosong
+                    if (res.users && Array.isArray(res.users) && res.users.length > 0) { 
                         usersData = res.users; 
                         localStorage.setItem('he_users_local', JSON.stringify(usersData)); 
                     }
                     renderData();
                     updateSyncStatusUI(true);
-                } else {
-                    updateSyncStatusUI(false);
                 }
             } catch(e) {
                 console.log("Silent pull offline backup mode:", e.message);
-                updateSyncStatusUI(false); // Kembalikan ke mode lokal jika terjadi kendala data fetch
             }
         }
 
@@ -999,17 +1122,14 @@
             if (googleSheetsURL) syncDataWithSheets();
         }
 
-        function updateSyncStatusUI(isS) {
-            document.getElementById('stat-sync').innerText = isS ? "Cloud" : "Lokal";
-            document.getElementById('stat-sync').className = isS ? "text-xs font-extrabold text-emerald-600" : "text-xs font-extrabold text-amber-600";
-            document.getElementById('banner-status-text').innerText = isS ? "Aplikasi Anda terhubung ke Google Sheets pusat." : "Aplikasi berjalan offline. Hubungkan ke Google Sheets untuk menyinkronkan data.";
-        }
-
         function renderUsersList() {
             const tbody = document.getElementById('users-table-body'); tbody.innerHTML = '';
             const mobileContainer = document.getElementById('users-cards-mobile'); mobileContainer.innerHTML = '';
 
-            usersData.forEach(u => {
+            // Pastikan membaca data user yang paling up-to-date dari localStorage
+            const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
+
+            activeUsers.forEach(u => {
                 tbody.innerHTML += `
                     <tr class="border-b">
                         <td class="p-4 font-bold">${u.name}</td>
@@ -1035,7 +1155,7 @@
                     </div>
                 `;
             });
-            document.getElementById('stat-total-users').innerText = `${usersData.length} Pengguna`;
+            document.getElementById('stat-total-users').innerText = `${activeUsers.length} Pengguna`;
         }
 
         function submitUserForm(e) {
@@ -1045,18 +1165,27 @@
             const password = document.getElementById('user-password').value.trim();
             const role = document.getElementById('user-role').value;
 
-            if (usersData.find(x => x.username === username)) { showAlert('Username sudah digunakan!', 'error'); return; }
-            usersData.push({ username, name, password, role });
-            localStorage.setItem('he_users_local', JSON.stringify(usersData));
+            // Membaca ulang user dari memori sebelum didaftarkan kembali
+            let activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
+
+            if (activeUsers.find(x => x.username === username)) { showAlert('Username sudah digunakan!', 'error'); return; }
+            
+            const newUser = { username, name, password, role };
+            activeUsers.push(newUser);
+            usersData = activeUsers; // Perbarui memori aktif
+
+            localStorage.setItem('he_users_local', JSON.stringify(activeUsers));
             document.getElementById('user-form').reset();
             renderUsersList();
-            showAlert('User berhasil disimpan! Mengirim ke Cloud...', 'info');
-            if (googleSheetsURL) syncDataWithSheets();
+            showAlert('User baru berhasil disimpan! Menyinkronkan ke Cloud...', 'info');
+            if (googleSheetsURL) syncDataWithSheets(true);
         }
 
         function deleteUser(username) {
             const loggedSession = JSON.parse(localStorage.getItem('he_session'));
-            const activeUser = usersData.find(u => u.name === loggedSession.name);
+            
+            let activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
+            const activeUser = activeUsers.find(u => u.name === loggedSession.name);
 
             if (activeUser && activeUser.username === username) {
                 showAlert('Gagal! Anda tidak bisa menghapus akun Anda sendiri.', 'error');
@@ -1064,10 +1193,11 @@
             }
 
             showConfirmModal("Hapus Pengguna", `Apakah Anda yakin ingin menghapus akses user "${username}"?`, function() {
-                usersData = usersData.filter(x => x.username !== username);
-                localStorage.setItem('he_users_local', JSON.stringify(usersData));
+                activeUsers = activeUsers.filter(x => x.username !== username);
+                usersData = activeUsers;
+                localStorage.setItem('he_users_local', JSON.stringify(activeUsers));
                 renderUsersList();
-                if (googleSheetsURL) syncDataWithSheets();
+                if (googleSheetsURL) syncDataWithSheets(true);
             });
         }
 
@@ -1095,6 +1225,21 @@
                     let pList = item.photos || [];
                     let pGHtml = pList.map(b => `<img src="${b}" onclick="openLightbox('${b}')" class="w-10 h-10 object-cover border rounded-lg cursor-pointer transform hover:scale-105 transition shadow-sm">`).join(' ');
 
+                    // DIPERBAIKI: Memberikan tombol Aksi dinamis (Teknisi biasa hanya punya tombol edit jika berstatus "Pending")
+                    let actionHtml = '';
+                    if (currentRole === 'admin') {
+                        actionHtml = `
+                            <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 mr-2 hover:underline font-bold">Edit</button>
+                            <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 hover:underline font-bold">Hapus</button>
+                        `;
+                    } else if (item.status === 'Pending') {
+                        actionHtml = `
+                            <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 hover:underline font-bold">Edit</button>
+                        `;
+                    } else {
+                        actionHtml = `<span class="text-slate-300 font-bold">-</span>`;
+                    }
+
                     tbody.innerHTML += `
                         <tr class="border-b hover:bg-slate-50">
                             <td class="p-4 font-bold">${item.tanggal}<br><span class="text-3xs text-slate-400 font-bold uppercase tracking-wider">${item.shift}</span></td>
@@ -1104,10 +1249,27 @@
                             <td class="p-4"><span class="inline-flex items-center space-x-1 text-[10px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span><p class="text-xs font-bold text-slate-700 mt-1.5">${item.area}</p></td>
                             <td class="p-4 max-w-xs"><p class="text-xs font-medium">${item.detail}</p><div class="flex gap-1.5 mt-2.5">${pGHtml}</div></td>
                             <td class="p-4 text-center"><span class="px-2.5 py-1 text-2xs font-extrabold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-250':'bg-amber-50 text-amber-800 border-amber-250'}">${item.status}</span></td>
-                            <td class="p-4 text-right ${currentRole!=='admin'?'hidden':''}"><button onclick="prepareEdit('${item.id}')" class="text-indigo-600 mr-2 hover:underline font-bold">Edit</button><button onclick="deletePekerjaan('${item.id}')" class="text-red-600 hover:underline font-bold">Hapus</button></td>
+                            <td class="p-4 text-right">${actionHtml}</td>
                         </tr>
                     `;
                     
+                    // Aksi untuk Layout Mobile harian
+                    let mobileActionHtml = '';
+                    if (currentRole === 'admin') {
+                        mobileActionHtml = `
+                            <div class="flex justify-end space-x-2 pt-2 border-t">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-3 py-1 bg-indigo-50 rounded-lg">Edit</button>
+                                <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-3 py-1 bg-red-50 rounded-lg">Hapus</button>
+                            </div>
+                        `;
+                    } else if (item.status === 'Pending') {
+                        mobileActionHtml = `
+                            <div class="flex justify-end space-x-2 pt-2 border-t">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-3 py-1 bg-indigo-50 rounded-lg">Edit</button>
+                            </div>
+                        `;
+                    }
+
                     mobileContainer.innerHTML += `
                         <div class="p-5 space-y-3.5 bg-white rounded-3xl border border-slate-150/60 shadow-sm mb-3">
                             <div class="flex justify-between items-start">
@@ -1129,7 +1291,7 @@
                             <div class="flex justify-between items-center text-3xs text-slate-400 font-bold uppercase tracking-wide">
                                 <span>${item.teknisi}</span><span>${item.tanggal}</span>
                             </div>
-                            ${currentRole==='admin'? `<div class="flex justify-end space-x-2 pt-2 border-t"><button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-3 py-1 bg-indigo-50 rounded-lg">Edit</button><button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-3 py-1 bg-red-50 rounded-lg">Hapus</button></div>`:''}
+                            ${mobileActionHtml}
                         </div>
                     `;
                 });
@@ -1176,17 +1338,15 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // --- EXPORT TO EXCEL DENGAN LINK FOTO INTERAKTIF (AMBIL DATA STABIL TANPA HILANG KOLOM) ---
+        // --- EXPORT TO EXCEL ---
         function exportToExcel() {
             if (currentRole !== 'admin') {
                 showAlert('Hanya Administrator yang diperbolehkan mengekspor data!', 'error');
                 return;
             }
 
-            // Dapatkan URL induk web harian untuk deep-link foto
             const appBaseUrl = window.location.origin + window.location.pathname;
 
-            // Template Rich Table HTML untuk Microsoft Excel / WPS Office
             let excelTemplate = `
                 <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
                 <head>
@@ -1244,7 +1404,6 @@
                     }
                 }
 
-                // Buat tautan deep-link interaktif unik per pekerjaan
                 const deepLinkUrl = `${appBaseUrl}?view=${item.id}`;
                 const linkLabel = pList.length > 0 ? `Buka Foto (${pList.length} Foto)` : 'Tidak Ada Foto';
                 const linkHtml = pList.length > 0 
@@ -1278,7 +1437,6 @@
                 </html>
             `;
 
-            // Ekspor file ke tipe MIME Excel XLS
             const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
