@@ -598,26 +598,6 @@
             }
         }
 
-        function showConfirmModal(title, message, callback) {
-            document.getElementById('confirm-title').innerText = title;
-            document.getElementById('confirm-message').innerText = message;
-            onConfirmCallback = callback;
-            document.getElementById('confirm-modal').classList.remove('hidden');
-            
-            const yesBtn = document.getElementById('btn-confirm-yes');
-            yesBtn.onclick = function() {
-                closeConfirmModal(true);
-            };
-        }
-
-        function closeConfirmModal(confirmed) {
-            document.getElementById('confirm-modal').classList.add('hidden');
-            if (confirmed && typeof onConfirmCallback === 'function') {
-                onConfirmCallback();
-            }
-            onConfirmCallback = null;
-        }
-
         // Penanganan Login
         function handleLogin(e) {
             e.preventDefault();
@@ -970,22 +950,38 @@
             if (!googleSheetsURL) return;
             try {
                 const response = await fetch(googleSheetsURL + "?action=read");
+                if (!response.ok) throw new Error("Gagal mengambil data dari cloud");
+                
                 const res = await response.json();
                 if (res.status === 'success') {
                     if (res.logbook) { 
                         logbookData = res.logbook.map(item => {
                             if (typeof item.photos === 'string') {
-                                try { item.photos = JSON.parse(item.photos); } catch(e) { item.photos = []; }
+                                try { 
+                                    item.photos = JSON.parse(item.photos); 
+                                } catch(e) { 
+                                    item.photos = []; 
+                                }
+                            }
+                            if (!Array.isArray(item.photos)) {
+                                item.photos = [];
                             }
                             return item;
                         });
                         localStorage.setItem('he_logbook_local', JSON.stringify(logbookData)); 
                     }
-                    if (res.users) { usersData = res.users; localStorage.setItem('he_users_local', JSON.stringify(usersData)); }
+                    if (res.users && res.users.length > 0) { 
+                        usersData = res.users; 
+                        localStorage.setItem('he_users_local', JSON.stringify(usersData)); 
+                    }
                     renderData();
+                    updateSyncStatusUI(true);
+                } else {
+                    updateSyncStatusUI(false);
                 }
             } catch(e) {
-                console.log("Silent pull offline backup mode.");
+                console.log("Silent pull offline backup mode:", e.message);
+                updateSyncStatusUI(false); // Kembalikan ke mode lokal jika terjadi kendala data fetch
             }
         }
 
