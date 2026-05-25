@@ -41,7 +41,7 @@
                     <p id="nav-user-name" class="font-bold text-sm text-white leading-tight">-</p>
                     <span id="nav-user-role" class="inline-flex items-center px-2 py-0.5 mt-1 text-[10px] font-bold bg-amber-400/10 text-amber-400 rounded-full border border-amber-400/20 capitalize">-</span>
                 </div>
-                <button onclick="logout()" class="bg-red-500/10 hover:bg-red-550 text-red-400 hover:text-white px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 text-xs sm:text-sm border border-red-500/20 font-bold active:scale-95">
+                <button onclick="logout()" class="bg-red-500/10 hover:bg-red-555 text-red-400 hover:text-white px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 text-xs sm:text-sm border border-red-500/20 font-bold active:scale-95 transform animate-transition">
                     Keluar
                 </button>
             </div>
@@ -121,7 +121,7 @@
                             <input type="password" id="login-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-sm font-medium transition" required>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 active:scale-95 transform">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 active:scale-95 transform animate-transition">
                         <span>Masuk Aplikasi</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
@@ -139,12 +139,12 @@
             <!-- TAB NAVIGASI KHUSUS ADMIN -->
             <div id="admin-tabs" class="hidden bg-white p-1.5 rounded-2xl border border-slate-200/60 shadow-sm flex space-x-2">
                 <button id="btn-tab-logbook" onclick="switchTab('logbook')" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
-                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                    <i data-lucide="clipboard-list" class="w-4.5 h-4.5"></i>
                     <span>Logbook Pekerjaan</span>
                 </button>
                 <button id="btn-tab-users" onclick="switchTab('users')" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
-                    <i data-lucide="users" class="w-4 h-4"></i>
-                    <span>Kelola Pengguna</span>
+                    <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                    <span>Kelola Sistem & User</span>
                 </button>
             </div>
 
@@ -181,13 +181,12 @@
                                 <input type="hidden" id="edit-id" value="">
                                 
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tanggal Pekerjaan (Otomatis)</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tanggal Pekerjaan (Otomatis - Read Only)</label>
                                     <div class="relative">
                                         <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                             <i data-lucide="calendar" class="w-4 h-4"></i>
                                         </span>
-                                        <!-- DIPERBAIKI: Menggunakan pointer-events-none, tabindex, dan event prevention agar 100% read-only di semua HP -->
-                                        <input type="date" id="job-date" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed text-xs focus:outline-none font-bold pointer-events-none" readonly tabindex="-1" onclick="event.preventDefault(); return false;" onfocus="this.blur();">
+                                        <input type="text" id="job-date" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-700 cursor-not-allowed text-xs focus:outline-none font-bold select-none" readonly disabled>
                                     </div>
                                 </div>
 
@@ -196,22 +195,13 @@
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Spesialis Bidang</label>
                                         <select id="job-specialty" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
-                                            <option value="" disabled selected>Pilih...</option>
-                                            <option value="Sipil / Konstruksi">Sipil / Konstruksi</option>
-                                            <option value="Elektrikal">Elektrikal</option>
-                                            <option value="Plumbing">Plumbing</option>
-                                            <option value="AC & Pendingin">AC & Pendingin</option>
-                                            <option value="Dapur & Laundry">Dapur & Laundry</option>
-                                            <option value="Umum">Umum</option>
+                                            <!-- Diisi secara dinamis melalui JavaScript -->
                                         </select>
                                     </div>
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jenis Pemeliharaan</label>
                                         <select id="job-maintenance-type" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
-                                            <option value="" disabled selected>Pilih...</option>
-                                            <option value="Corrective (Perbaikan)">Corrective (Perbaikan)</option>
-                                            <option value="Preventive (Perawatan)">Preventive (Perawatan)</option>
-                                            <option value="Instalasi">Instalasi</option>
+                                            <!-- Diisi secara dinamis melalui JavaScript -->
                                         </select>
                                     </div>
                                 </div>
@@ -232,7 +222,7 @@
                                             <span>Public Area</span>
                                         </button>
                                     </div>
-                                    <input type="hidden" id="job-category" required>
+                                    <input type="hidden" id="job-category">
                                 </div>
 
                                 <div>
@@ -248,11 +238,11 @@
                                 <div class="grid grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jam Mulai</label>
-                                        <input type="time" id="job-time-start" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
+                                        <input type="time" id="job-time-start" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold" required>
                                     </div>
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jam Selesai</label>
-                                        <input type="time" id="job-time-finish" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
+                                        <input type="time" id="job-time-finish" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold" required>
                                     </div>
                                 </div>
 
@@ -295,16 +285,15 @@
                                         <span>Catatan Administratif (Khusus Admin)</span>
                                     </p>
                                     <div>
-                                        <textarea id="job-admin-notes" rows="2" placeholder="Tulis catatan admin..." class="w-full px-3 py-2 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-xs font-semibold"></textarea>
+                                        <textarea id="job-admin-notes" rows="2" placeholder="Tulis catatan admin..." class="w-full px-3 py-2 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-xs font-semibold"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="pt-2 flex space-x-2">
-                                    <button type="button" id="btn-cancel" onclick="resetForm()" class="hidden flex-1 bg-slate-100 hover:bg-slate-200 py-3 rounded-xl font-bold transition duration-200 text-xs">
-                                        Batal
+                                    <button type="button" id="btn-cancel" onclick="resetForm()" class="hidden flex-1 bg-red-50 hover:bg-red-100 text-red-700 py-3 rounded-xl font-bold transition duration-200 text-xs border border-red-200 animate-transition">
+                                        Batal Edit
                                     </button>
-                                    <!-- Label Tombol Diubah menjadi "Pekerjaan Selesai" -->
-                                    <button type="submit" id="btn-submit" class="flex-2 w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-extrabold transition duration-200 shadow-md shadow-indigo-600/10 text-xs flex items-center justify-center space-x-2 active:scale-95 transform">
+                                    <button type="submit" id="btn-submit" class="flex-2 w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-extrabold transition duration-200 shadow-lg text-xs flex items-center justify-center space-x-2 active:scale-95 transform animate-transition">
                                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                                         <span>Pekerjaan Selesai</span>
                                     </button>
@@ -323,7 +312,7 @@
                         </div>
 
                         <!-- FILTERING -->
-                        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-150 shadow-sm space-y-3">
                             <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
                                 <div class="relative w-full md:w-72">
                                     <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -359,11 +348,11 @@
                                     <span>Riwayat Aktivitas Logbook</span>
                                 </h3>
                                 <div class="flex flex-wrap items-center gap-1.5">
-                                    <button id="btn-admin-add-job" onclick="toggleInputFormAdmin()" class="hidden text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl transition active:scale-95 shadow-sm">
+                                    <button id="btn-admin-add-job" onclick="toggleInputFormAdmin()" class="hidden text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl transition active:scale-95 shadow-sm animate-transition">
                                         <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                         <span>Tambah Pekerjaan</span>
                                     </button>
-                                    <button id="btn-admin-export" onclick="exportToExcel()" class="hidden text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl border border-emerald-200 transition active:scale-95">
+                                    <button id="btn-admin-export" onclick="exportToExcel()" class="hidden text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl border border-emerald-200 transition active:scale-95 animate-transition">
                                         <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         <span>Ekspor Excel</span>
                                     </button>
@@ -381,7 +370,7 @@
                                         <tr class="bg-slate-50/80 text-slate-400 uppercase text-[9px] font-extrabold tracking-widest border-b border-slate-100">
                                             <th class="py-4 px-5">Tanggal & Shift</th>
                                             <th class="py-4 px-5">Bidang & Tipe</th>
-                                            <th class="py-4 px-5">Durasi Kerja</th>
+                                            <th class="py-4 px-5">Jam & Durasi Kerja</th>
                                             <th class="py-4 px-5">Teknisi</th>
                                             <th class="py-4 px-5">Kategori / Lokasi</th>
                                             <th class="py-4 px-5">Detail Pekerjaan / Lampiran</th>
@@ -406,14 +395,15 @@
                 </div>
             </div>
 
-            <!-- TAB PANEL 2: MANAGE USERS (ADMIN ONLY) -->
+            <!-- TAB PANEL 2: MANAGE USERS & SYSTEM CONFIG (ADMIN ONLY) -->
             <div id="tab-content-users" class="hidden space-y-6">
+                <!-- PANEL HAK AKSES USER -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1">
                         <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100/80">
-                            <div class="flex items-center space-x-2 pb-4 mb-5 border-b border-slate-100">
+                            <div class="flex items-center space-x-2.5 pb-4 mb-5 border-b border-slate-100">
                                 <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
-                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                                    <i data-lucide="user-plus" class="w-4.5 h-4.5"></i>
                                 </div>
                                 <h2 id="user-form-title" class="text-sm font-extrabold text-slate-800">Tambah Akses</h2>
                             </div>
@@ -455,8 +445,8 @@
                                     </select>
                                 </div>
                                 <div class="pt-2 flex space-x-2">
-                                    <button type="button" id="btn-user-cancel" onclick="resetUserForm()" class="hidden flex-1 bg-slate-100 py-2.5 rounded-xl font-bold text-xs">Batal</button>
-                                    <button type="submit" id="btn-user-submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 active:scale-95 transition">
+                                    <button type="button" id="btn-user-cancel" onclick="resetUserForm()" class="hidden flex-1 bg-slate-100 py-2.5 rounded-xl font-bold text-xs animate-transition">Batal</button>
+                                    <button type="submit" id="btn-user-submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 active:scale-95 transition animate-transition">
                                         <i data-lucide="user-check" class="w-4 h-4"></i><span>Simpan User</span>
                                     </button>
                                 </div>
@@ -491,14 +481,59 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-        </section>
+                <!-- FITUR MANAJEMEN DROPDOWN SPESIALIS & JENIS PEMELIHARAAN (KHUSUS ADMIN) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Kelola Spesialis Bidang -->
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-800 text-sm flex items-center space-x-2">
+                                <i data-lucide="briefcase" class="w-4.5 h-4.5 text-indigo-500"></i>
+                                <span>Kelola Spesialis Bidang</span>
+                            </h3>
+                        </div>
+                        <form onsubmit="addSpecialtyOption(event)" class="flex space-x-2 mb-4">
+                            <input type="text" id="new-specialty" placeholder="Tambah Spesialis (Misal: Gardener)..." class="flex-grow px-3 py-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50" required>
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 flex items-center space-x-1 animate-transition">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Tambah</span>
+                            </button>
+                        </form>
+                        <div class="max-h-40 overflow-y-auto border border-slate-100 rounded-2xl p-2 bg-slate-50/30">
+                            <ul id="specialties-list" class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                                <!-- Terisi dinamis -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Kelola Jenis Pemeliharaan -->
+                    <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+                        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                            <h3 class="font-extrabold text-slate-800 text-sm flex items-center space-x-2">
+                                <i data-lucide="sliders" class="w-4.5 h-4.5 text-indigo-500"></i>
+                                <span>Kelola Jenis Pemeliharaan</span>
+                            </h3>
+                        </div>
+                        <form onsubmit="addMaintenanceTypeOption(event)" class="flex space-x-2 mb-4">
+                            <input type="text" id="new-maintenance" placeholder="Tambah Tipe (Misal: Project)..." class="flex-grow px-3 py-2 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50" required>
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold transition active:scale-95 flex items-center space-x-1 animate-transition">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Tambah</span>
+                            </button>
+                        </form>
+                        <div class="max-h-40 overflow-y-auto border border-slate-100 rounded-2xl p-2 bg-slate-50/30">
+                            <ul id="maintenance-types-list" class="divide-y divide-slate-100 text-xs font-bold text-slate-600">
+                                <!-- Terisi dinamis -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- Closes tab-content-users -->
+        </section> <!-- Closes dashboard-section -->
     </main>
 
     <!-- MANUAL SETTING MODAL -->
     <div id="setup-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100 animate-fade-in">
             <h3 class="font-extrabold text-slate-900 text-base flex items-center space-x-2">
                 <i data-lucide="settings" class="w-5 h-5 text-indigo-600"></i>
                 <span>Pengaturan Apps Script</span>
@@ -507,13 +542,13 @@
             <input type="url" id="sheet-api-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-3 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             <div class="flex justify-end space-x-2 pt-2">
                 <button onclick="toggleSetupModal(false)" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition">Batal</button>
-                <button onclick="saveSetupConfig()" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-emerald-600/10 transition active:scale-95">Simpan</button>
+                <button onclick="saveSetupConfig()" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-emerald-600/10 transition active:scale-95 animate-transition">Simpan</button>
             </div>
         </div>
     </div>
 
     <!-- CUSTOM CONFIRMATION MODAL -->
-    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 text-center border shadow-xl">
             <div class="mx-auto bg-red-100 text-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-inner">
                 <i data-lucide="alert-triangle" class="w-6 h-6"></i>
@@ -523,21 +558,21 @@
                 <p id="confirm-message" class="text-xs text-slate-500 mt-2 font-medium">Tindakan ini tidak dapat dibatalkan.</p>
             </div>
             <div class="flex space-x-3 pt-2">
-                <button onclick="closeConfirmModal(false)" class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl transition hover:bg-slate-200">Batal</button>
-                <button id="btn-confirm-yes" class="flex-1 py-2.5 text-xs font-bold text-white bg-red-600 rounded-xl shadow-md transition hover:bg-red-755">Hapus</button>
+                <button onclick="closeConfirmModal(false)" class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 transition hover:bg-slate-200">Batal</button>
+                <button id="btn-confirm-yes" class="flex-1 py-2.5 text-xs font-bold text-white bg-red-600 rounded-xl shadow-md transition hover:bg-red-755 animate-transition">Hapus</button>
             </div>
         </div>
     </div>
 
     <!-- LIGHTBOX MULTI-PHOTO VIEWER -->
-    <div id="lightbox-modal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4">
+    <div id="lightbox-modal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4 animate-fade-in">
         <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white font-bold text-lg p-2.5 bg-white/10 rounded-full hover:bg-white/20 transition">✕ Close</button>
         <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain border border-white/10">
     </div>
 
     <!-- APP BUSINESS LOGIC -->
     <script>
-        // DB lokal cadangan
+        // DB lokal harian & Opsi dropdown bawaan
         let usersData = JSON.parse(localStorage.getItem('he_users_local')) || [
             { username: 'admin', name: 'Chief Engineering (Admin)', role: 'admin', password: 'admin123' },
             { username: 'teknisi1', name: 'Ahmad (Teknisi 1)', role: 'user', password: '123' },
@@ -545,6 +580,15 @@
         ];
 
         let logbookData = JSON.parse(localStorage.getItem('he_logbook_local')) || [];
+        
+        // Database dropdown spesialis bidang & tipe pemeliharaan kustom admin
+        let specialtiesData = JSON.parse(localStorage.getItem('he_specialties_local')) || [
+            "Sipil / Construction", "Elektrikal", "Plumbing", "AC & Pendingin", "Dapur & Laundry", "Umum"
+        ];
+        let maintenanceTypesData = JSON.parse(localStorage.getItem('he_maintenance_types_local')) || [
+            "Corrective (Perbaikan)", "Preventive (Perawatan)", "Instalasi"
+        ];
+
         let currentRole = null;
         let currentUserName = null;
         let activeCategory = '';
@@ -552,9 +596,12 @@
         let selectedPhotosBase64 = [];
         let onConfirmCallback = null;
 
-        // --- GLOBAL UTILITY FUNCTIONS (Diletakkan di bagian paling atas agar terhindar dari Hoisting Error) ---
+        // =========================================================================
+        // 1. GLOBAL UTILITY & HELPER FUNCTIONS
+        // =========================================================================
         function showAlert(msg, type) {
             const box = document.getElementById('alert-box');
+            if (!box) return;
             document.getElementById('alert-message').innerText = msg;
             box.className = `mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-md transition-all duration-300 ${
                 type === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 
@@ -566,11 +613,12 @@
         }
 
         function closeAlert() { 
-            document.getElementById('alert-box').classList.add('hidden'); 
-            document.getElementById('alert-debug').classList.add('hidden');
+            const box = document.getElementById('alert-box');
+            if (box) box.classList.add('hidden'); 
+            const debugBox = document.getElementById('alert-debug');
+            if (debugBox) debugBox.classList.add('hidden');
         }
 
-        // Memperbarui UI status Sinkronisasi serta menyembunyikan/menampilkan banner database secara dinamis
         function updateSyncStatusUI(isS) {
             const statusText = document.getElementById('stat-sync');
             if (statusText) {
@@ -582,7 +630,6 @@
                 bannerStatus.innerText = isS ? "Aplikasi Anda terhubung ke Google Sheets & Google Drive pusat secara real-time." : "Aplikasi berjalan offline. Hubungkan ke Google Sheets untuk menyinkronkan data.";
             }
 
-            // MODIFIKASI: Sembunyikan banner jika database tersinkronisasi (Cloud), tunjukkan jika offline (Lokal)
             const syncBanner = document.getElementById('sync-banner');
             if (syncBanner) {
                 const activeTab = document.getElementById('tab-content-logbook').classList.contains('hidden') ? 'users' : 'logbook';
@@ -594,50 +641,101 @@
             }
         }
 
-        window.onload = function() {
-            lucide.createIcons();
-            setTodayDate();
-
-            // SENSOR OTOMATIS LINK PARAMETER (?api=...)
-            const urlParams = new URLSearchParams(window.location.search);
-            const apiParam = urlParams.get('api');
-            const viewParam = urlParams.get('view');
-            
-            if (apiParam && apiParam.startsWith('https://script.google.com/')) {
-                googleSheetsURL = apiParam.trim();
-                localStorage.setItem('he_sheets_url', googleSheetsURL);
-                window.history.replaceState({}, document.title, window.location.pathname);
-                showAlert('Database terhubung otomatis via Link khusus!', 'success');
-            }
-
-            if (viewParam) {
-                sessionStorage.setItem('pending_view_id', viewParam);
-            }
-
-            if (googleSheetsURL) {
-                document.getElementById('sheet-api-url').value = googleSheetsURL;
-                updateSyncStatusUI(true);
-                pullDataFromSheetsSilently();
-            } else {
-                updateSyncStatusUI(false);
-            }
-
-            const savedSession = JSON.parse(localStorage.getItem('he_session'));
-            if (savedSession) {
-                applyUserSession(savedSession.role, savedSession.name);
-            } else {
-                showSection('login');
-            }
-
-            renderData();
-        };
-
         function setTodayDate() {
             const dateInput = document.getElementById('job-date');
             if (dateInput) {
                 const today = new Date();
-                dateInput.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const year = today.getFullYear();
+                dateInput.value = `${year}-${month}-${day}`;
             }
+        }
+
+        function formatOnlyDate(dateStr) {
+            if (!dateStr) return "-";
+            let cleanDate = dateStr.toString().split('T')[0].split(' ')[0];
+            const parts = cleanDate.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`; // Hasil: DD/MM/YYYY
+            }
+            return cleanDate;
+        }
+
+        function formatCleanTime(timeStr) {
+            if (!timeStr) return "--:--";
+            let timeStrClean = timeStr.toString().trim();
+            if (timeStrClean.includes('T')) {
+                try {
+                    let parts = timeStrClean.split('T')[1]; 
+                    let timeParts = parts.split(':');
+                    return `${timeParts[0]}:${timeParts[1]}`; 
+                } catch(e) {
+                    return timeStrClean;
+                }
+            }
+            if (timeStrClean.includes(' ')) {
+                try {
+                    let parts = timeStrClean.split(' ')[1];
+                    let timeParts = parts.split(':');
+                    return `${timeParts[0]}:${timeParts[1]}`;
+                } catch(e) {
+                    return timeStrClean;
+                }
+            }
+            return timeStrClean;
+        }
+
+        function calculateDuration(start, finish) {
+            let cleanStart = formatCleanTime(start);
+            let cleanFinish = formatCleanTime(finish);
+            if (!cleanStart || !cleanFinish || cleanStart === '--:--' || cleanFinish === '--:--') return "";
+            try {
+                const startParts = cleanStart.split(':');
+                const finishParts = cleanFinish.split(':');
+                if (startParts.length < 2 || finishParts.length < 2) return "";
+                
+                let startMin = parseInt(startParts[0], 10) * 60 + parseInt(startParts[1], 10);
+                let finishMin = parseInt(finishParts[0], 10) * 60 + parseInt(finishParts[1], 10);
+                
+                if (isNaN(startMin) || isNaN(finishMin)) return "";
+
+                if (finishMin < startMin) {
+                    finishMin += 24 * 60;
+                }
+                
+                const diffMin = finishMin - startMin;
+                if (diffMin < 0) return "";
+                const hours = Math.floor(diffMin / 60);
+                const mins = diffMin % 60;
+                
+                if (hours > 0) {
+                    return `${hours} jam ${mins} mnt`;
+                }
+                return `${mins} mnt`;
+            } catch (e) {
+                return "";
+            }
+        }
+
+        function toggleSetupModal(show) { 
+            const setupModal = document.getElementById('setup-modal');
+            if (setupModal) {
+                setupModal.className = show ? 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4' : 'hidden'; 
+            }
+        }
+
+        function saveSetupConfig() {
+            const rawURL = document.getElementById('sheet-api-url').value.trim();
+            if (rawURL && !rawURL.startsWith('https://script.google.com/')) {
+                showAlert('Format URL tidak valid!', 'error');
+                return;
+            }
+            googleSheetsURL = rawURL;
+            localStorage.setItem('he_sheets_url', googleSheetsURL);
+            toggleSetupModal(false);
+            updateSyncStatusUI(!!googleSheetsURL);
+            if (googleSheetsURL) syncDataWithSheets();
         }
 
         function showConfirmModal(title, message, callback) {
@@ -647,9 +745,11 @@
             document.getElementById('confirm-modal').classList.remove('hidden');
             
             const yesBtn = document.getElementById('btn-confirm-yes');
-            yesBtn.onclick = function() {
-                closeConfirmModal(true);
-            };
+            if (yesBtn) {
+                yesBtn.onclick = function() {
+                    closeConfirmModal(true);
+                };
+            }
         }
 
         function closeConfirmModal(confirmed) {
@@ -660,79 +760,43 @@
             onConfirmCallback = null;
         }
 
-        // Penanganan Login
-        function handleLogin(e) {
-            e.preventDefault();
-            const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
-            const passwordInput = document.getElementById('login-password').value;
-
-            // Membaca ulang usersData ter-update dari localStorage untuk menjamin user baru bisa langsung login
-            const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
-            const user = activeUsers.find(u => u.username === usernameInput);
-
-            if (user && user.password === passwordInput) {
-                applyUserSession(user.role, user.name);
-                showAlert(`Selamat datang, ${user.name}!`, 'success');
-            } else {
-                showAlert('Username atau Password salah!', 'error');
-            }
+        function renderPhotoPreviews() {
+            const container = document.getElementById('photo-preview-container');
+            if (!container) return;
+            container.innerHTML = '';
+            selectedPhotosBase64.forEach((base64, index) => {
+                const wrap = document.createElement('div');
+                wrap.className = "relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm";
+                wrap.innerHTML = `
+                    <img src="${base64}" class="w-full h-full object-cover">
+                    <button type="button" onclick="selectedPhotosBase64.splice(${index}, 1); renderPhotoPreviews();" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md w-5 h-5 flex items-center justify-center text-xs">✕</button>
+                `;
+                container.appendChild(wrap);
+            });
         }
 
-        function applyUserSession(role, name) {
-            currentRole = role;
-            currentUserName = name;
-            localStorage.setItem('he_session', JSON.stringify({role, name}));
-
-            document.getElementById('nav-user-name').innerText = name;
-            document.getElementById('nav-user-role').innerText = role === 'admin' ? 'Administrator' : 'Teknisi';
-            document.getElementById('user-nav').classList.remove('hidden');
-
-            const inputCol = document.getElementById('input-container-col');
-            const historyCol = document.getElementById('history-container-col');
-            const adminFields = document.getElementById('admin-only-fields');
-            const adminTabs = document.getElementById('admin-tabs');
-            const btnAdminAddJob = document.getElementById('btn-admin-add-job');
-            const btnAdminExport = document.getElementById('btn-admin-export');
-
-            if (role === 'admin') {
-                adminTabs.classList.remove('hidden');
-                btnAdminAddJob.classList.remove('hidden');
-                btnAdminExport.classList.remove('hidden');
-                inputCol.classList.add('hidden');
-                historyCol.className = "lg:col-span-3 space-y-6";
-                adminFields.classList.remove('hidden');
-            } else {
-                adminTabs.classList.add('hidden');
-                btnAdminAddJob.classList.add('hidden');
-                btnAdminExport.classList.add('hidden');
-                inputCol.classList.remove('hidden');
-                historyCol.className = "lg:col-span-2 space-y-6";
-                adminFields.classList.add('hidden');
-            }
-
-            switchTab('logbook');
-            showSection('dashboard');
-            document.getElementById('login-form').reset();
-            
-            const pendingViewId = sessionStorage.getItem('pending_view_id');
-            if (pendingViewId) {
-                sessionStorage.removeItem('pending_view_id');
-                document.getElementById('filter-search').value = pendingViewId;
-                applyFilters();
-                setTimeout(() => {
-                    document.getElementById('history-container-col').scrollIntoView({ behavior: 'smooth' });
-                }, 500);
-            } else {
-                renderData();
-            }
+        function openLightbox(url) {
+            const img = document.getElementById('lightbox-img');
+            if (img) img.src = url;
+            const modal = document.getElementById('lightbox-modal');
+            if (modal) modal.classList.remove('hidden');
         }
 
-        function logout() {
-            localStorage.removeItem('he_session');
-            currentRole = null;
-            currentUserName = null;
-            document.getElementById('user-nav').classList.add('hidden');
-            showSection('login');
+        function closeLightbox() { 
+            const modal = document.getElementById('lightbox-modal');
+            if (modal) modal.classList.add('hidden'); 
+        }
+
+        function selectCategory(cat) {
+            activeCategory = cat;
+            document.getElementById('job-category').value = cat;
+            ['cat-room', 'cat-meeting', 'cat-public'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center border-slate-200 text-slate-600 bg-white";
+            });
+            let targetId = cat === 'Guest Room' ? 'cat-room' : cat === 'Meeting Room' ? 'cat-meeting' : 'cat-public';
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) targetEl.className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center bg-indigo-50 border-indigo-500 text-indigo-700 ring-2 ring-indigo-500/15";
         }
 
         function toggleInputFormAdmin() {
@@ -748,46 +812,19 @@
             }
         }
 
-        function showSection(name) {
-            document.getElementById('login-section').className = name === 'login' ? 'max-w-md mx-auto my-8 bg-white rounded-3xl shadow-xl border border-slate-100' : 'hidden';
-            document.getElementById('dashboard-section').className = name === 'dashboard' ? 'space-y-6' : 'hidden';
-        }
+        function resetForm() {
+            const formEl = document.getElementById('logbook-form');
+            if (formEl) formEl.reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('form-job-title').innerText = "Input Pekerjaan Baru";
+            selectedPhotosBase64 = []; 
+            renderPhotoPreviews();
+            setTodayDate(); 
+            
+            const cancelBtn = document.getElementById('btn-cancel');
+            if (cancelBtn) cancelBtn.classList.add('hidden');
 
-        function switchTab(name) {
-            const btnLogbook = document.getElementById('btn-tab-logbook');
-            const btnUsers = document.getElementById('btn-tab-users');
-            const contentLogbook = document.getElementById('tab-content-logbook');
-            const contentUsers = document.getElementById('tab-content-users');
-
-            if (name === 'logbook') {
-                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
-                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
-                contentLogbook.classList.remove('hidden');
-                contentUsers.classList.add('hidden');
-                
-                // Cek status sinkronisasi aktif saat ini sebelum menampilkan banner di tab logbook
-                const isS = (document.getElementById('stat-sync').innerText === "Cloud");
-                if (isS) {
-                    document.getElementById('sync-banner').classList.add('hidden');
-                } else {
-                    document.getElementById('sync-banner').classList.remove('hidden');
-                }
-            } else {
-                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
-                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
-                contentLogbook.classList.add('hidden');
-                contentUsers.classList.remove('hidden');
-                document.getElementById('sync-banner').classList.add('hidden'); // Sembunyikan banner di kelola user
-                renderUsersList();
-            }
-        }
-
-        function selectCategory(cat) {
-            activeCategory = cat;
-            document.getElementById('job-category').value = cat;
-            ['cat-room', 'cat-meeting', 'cat-public'].forEach(id => document.getElementById(id).className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center border-slate-200 text-slate-600 bg-white");
-            let targetId = cat === 'Guest Room' ? 'cat-room' : cat === 'Meeting Room' ? 'cat-meeting' : 'cat-public';
-            document.getElementById(targetId).className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center bg-indigo-50 border-indigo-500 text-indigo-700 ring-2 ring-indigo-500/15";
+            if (currentRole === 'admin') toggleInputFormAdmin();
         }
 
         function handlePhotoSelection(e) {
@@ -824,312 +861,16 @@
             e.target.value = '';
         }
 
-        function renderPhotoPreviews() {
-            const container = document.getElementById('photo-preview-container');
-            container.innerHTML = '';
-            selectedPhotosBase64.forEach((base64, index) => {
-                const wrap = document.createElement('div');
-                wrap.className = "relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm";
-                wrap.innerHTML = `
-                    <img src="${base64}" class="w-full h-full object-cover">
-                    <button type="button" onclick="selectedPhotosBase64.splice(${index}, 1); renderPhotoPreviews();" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md w-5 h-5 flex items-center justify-center text-xs">✕</button>
-                `;
-                container.appendChild(wrap);
-            });
-        }
-
-        function submitPekerjaan(e) {
-            e.preventDefault();
-            const editId = document.getElementById('edit-id').value;
-            const tanggal = document.getElementById('job-date').value;
-            const specialty = document.getElementById('job-specialty').value;
-            const maintenanceType = document.getElementById('job-maintenance-type').value;
-            const category = document.getElementById('job-category').value;
-            const area = document.getElementById('job-area').value.trim();
-            const detail = document.getElementById('job-detail').value.trim();
-            const shift = document.getElementById('job-shift').value;
-            const status = document.getElementById('job-status').value;
-            const timeStart = document.getElementById('job-time-start').value;
-            const timeFinish = document.getElementById('job-time-finish').value;
-            const adminNotes = document.getElementById('job-admin-notes').value.trim();
-
-            if (!category) {
-                showAlert('Pilih Kategori Area terlebih dahulu!', 'error');
-                return;
-            }
-
-            // Logika deteksi perubahan teknisi pengerjaan saat mengedit data Pending milik user lain
-            let originalTeknisi = currentUserName;
-            if (editId) {
-                const idx = logbookData.findIndex(item => item.id === editId);
-                if (idx !== -1) {
-                    let rawTeknisi = logbookData[idx].teknisi || currentUserName;
-                    // Bersihkan tanda "Diedit" lama untuk mendapatkan nama teknisi asli pembuat logbook pertama kali
-                    const editIndex = rawTeknisi.indexOf(" (Diedit");
-                    if (editIndex !== -1) {
-                        rawTeknisi = rawTeknisi.substring(0, editIndex);
-                    }
-                    originalTeknisi = rawTeknisi;
-                }
-            }
-
-            // Jika yang menyimpan berbeda dari teknisi pertama, catat keterangannya
-            let finalTeknisiValue = originalTeknisi;
-            if (originalTeknisi !== currentUserName) {
-                finalTeknisiValue = `${originalTeknisi} (Diedit oleh: ${currentUserName})`;
-            }
-
-            const job = {
-                id: editId || String(Date.now()),
-                timestamp: new Date().toLocaleString('id-ID'),
-                tanggal, specialty, maintenance_type: maintenanceType, category, area, detail, shift, status,
-                time_start: timeStart, time_finish: timeFinish, admin_notes: adminNotes,
-                photos: [...selectedPhotosBase64], // Simpan sebagai array murni
-                teknisi: finalTeknisiValue
-            };
-
-            if (editId) {
-                const index = logbookData.findIndex(item => item.id === editId);
-                if (index !== -1) logbookData[index] = job;
-            } else {
-                logbookData.unshift(job);
-            }
-
-            localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
-            showAlert('Data tersimpan lokal di HP!', 'success');
-            resetForm();
-            renderData();
-
-            // Jalankan sinkronisasi secara non-silent (dengan animasi progres loading) jika terkoneksi ke Google Sheets
-            if (googleSheetsURL) {
-                syncDataWithSheets(false);
-            }
-        }
-
-        // Memberikan izin edit kepada user biasa khusus untuk pekerjaan yang masih berstatus "Pending"
-        function prepareEdit(id) {
-            const log = logbookData.find(item => item.id === id); if (!log) return;
-            
-            // Periksa izin edit: admin bisa mengedit semuanya, teknisi biasa hanya boleh mengedit jika status "Pending"
-            if (currentRole !== 'admin' && log.status !== 'Selesai' && log.status !== 'Pending') {
-                showAlert('Hanya pekerjaan berstatus Pending yang dapat diedit oleh Teknisi!', 'error');
-                return;
-            }
-            if (currentRole !== 'admin' && log.status === 'Selesai') {
-                showAlert('Pekerjaan yang telah Selesai hanya dapat diedit oleh Administrator!', 'error');
-                return;
-            }
-
-            // Membuka form input agar bisa diedit di HP
-            document.getElementById('input-container-col').classList.remove('hidden');
-            document.getElementById('history-container-col').className = "lg:col-span-2 space-y-6";
-
-            document.getElementById('edit-id').value = log.id;
-            document.getElementById('job-date').value = log.tanggal;
-            document.getElementById('job-specialty').value = log.specialty || '';
-            document.getElementById('job-maintenance-type').value = log.maintenance_type || '';
-            selectCategory(log.category);
-            document.getElementById('job-area').value = log.area;
-            document.getElementById('job-detail').value = log.detail;
-            document.getElementById('job-shift').value = log.shift;
-            document.getElementById('job-status').value = log.status;
-            document.getElementById('job-time-start').value = log.time_start || '';
-            document.getElementById('job-time-finish').value = log.time_finish || '';
-            document.getElementById('job-admin-notes').value = log.admin_notes || '';
-
-            // Penyelarasan format Array foto
-            if (Array.isArray(log.photos)) {
-                selectedPhotosBase64 = [...log.photos];
-            } else if (typeof log.photos === 'string') {
-                try { selectedPhotosBase64 = JSON.parse(log.photos) || []; } catch(e) { selectedPhotosBase64 = []; }
-            } else {
-                selectedPhotosBase64 = [];
-            }
-            renderPhotoPreviews();
-
-            document.getElementById('btn-cancel').classList.remove('hidden');
-            
-            // Beri notifikasi info jika teknisi pengubah berbeda dari teknisi pembuat harian pertama
-            let originalTeknisi = log.teknisi || "";
-            const editIndex = originalTeknisi.indexOf(" (Diedit");
-            if (editIndex !== -1) {
-                originalTeknisi = originalTeknisi.substring(0, editIndex);
-            }
-            if (originalTeknisi && originalTeknisi !== currentUserName) {
-                showAlert(`Info: Pekerjaan ini milik ${originalTeknisi}. Nama Anda akan dicatat sebagai pengubah terakhir saat disimpan kembali.`, 'info');
-            }
-        }
-
-        function deletePekerjaan(id) {
-            if (currentRole !== 'admin') return;
-            showConfirmModal("Hapus Logbook", "Hapus logbook pengerjaan ini secara permanen?", function() {
-                logbookData = logbookData.filter(item => item.id !== id);
-                localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
-                renderData();
-                if (googleSheetsURL) syncDataWithSheets(true);
-            });
-        }
-
-        // --- SISTEM SYNC TERBARU MENGGUNAKAN FORM DATA (BEBAS BLOKIR CORS) ---
-        async function syncDataWithSheets(isSilent = false) {
-            if (!googleSheetsURL) {
-                if (!isSilent) showAlert('Konfigurasi URL Google Sheets belum disetel!', 'error');
-                return;
-            }
-
-            const btnSubmit = document.getElementById('btn-submit');
-            let originalBtnHtml = "";
-            if (btnSubmit) {
-                originalBtnHtml = btnSubmit.innerHTML;
-                btnSubmit.disabled = true;
-                btnSubmit.innerHTML = `
-                    <svg class="animate-spin h-4 w-4 text-white inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span>Mengunggah data...</span>
-                `;
-            }
-
-            if (!isSilent) {
-                showAlert('Sedang menghubungkan ke Google Sheets...', 'info');
-                document.getElementById('diagnostics-box').classList.add('hidden');
-                document.getElementById('alert-debug').classList.add('hidden');
-            }
-
-            try {
-                // Pastikan format foto sebelum dikirim ter-stringifikasi
-                const formattedLogbook = logbookData.map(item => {
-                    return {
-                        ...item,
-                        photos: Array.isArray(item.photos) ? JSON.stringify(item.photos) : (item.photos || '[]')
-                    };
-                });
-
-                // Konversi data JSON menjadi string teks terlebih dahulu
-                const payloadStr = JSON.stringify({
-                    action: 'syncFull',
-                    logbook: formattedLogbook,
-                    users: usersData
-                });
-
-                // Bungkus di dalam objek URLSearchParams untuk mengelabui browser agar melewatinya tanpa Preflight CORS Check
-                const formData = new URLSearchParams();
-                formData.append('payload', payloadStr);
-
-                const response = await fetch(googleSheetsURL, {
-                    method: 'POST',
-                    mode: 'cors',
-                    redirect: 'follow',
-                    headers: { 
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' 
-                    },
-                    body: formData.toString()
-                });
-
-                if (!response.ok) {
-                    throw new Error("Koneksi gagal dengan status: " + response.status);
-                }
-
-                const res = await response.json();
-                if (res.status === 'success') {
-                    if (res.logbook) {
-                        logbookData = res.logbook.map(item => {
-                            if (typeof item.photos === 'string') {
-                                try { item.photos = JSON.parse(item.photos); } catch(e) { item.photos = []; }
-                            }
-                            return item;
-                        });
-                        localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
-                    }
-                    if (res.users && res.users.length > 0) {
-                        usersData = res.users;
-                        localStorage.setItem('he_users_local', JSON.stringify(usersData));
-                    }
-                    renderData();
-                    updateSyncStatusUI(true);
-                    if (!isSilent) showAlert('Sinkronisasi Google Sheets & Google Drive Berhasil!', 'success');
-                } else {
-                    if (!isSilent) showAlert('Gagal menyinkronkan data: ' + res.message, 'error');
-                }
-            } catch (err) {
-                console.error("Sync failed:", err);
-                if (!isSilent) {
-                    showAlert('Gagal Terhubung! Google Sheets menolak permintaan Anda.', 'error');
-                    document.getElementById('diagnostics-box').classList.remove('hidden');
-                    
-                    const debugBox = document.getElementById('alert-debug');
-                    debugBox.innerText = `Pesan Kesalahan: ${err.message}. Pastikan URL Apps Script valid, berakhiran "/exec", dan telah dideploy untuk publik ("Siapa saja/Anyone").`;
-                    debugBox.classList.remove('hidden');
-                } else {
-                    // Jika silent, ubah status UI menjadi lokal karena koneksi gagal tanpa mengganggu pengguna
-                    updateSyncStatusUI(false);
-                }
-            } finally {
-                // Kembalikan tampilan tombol kembali normal jika proses loading sync selesai
-                if (btnSubmit && originalBtnHtml) {
-                    btnSubmit.disabled = false;
-                    btnSubmit.innerHTML = originalBtnHtml;
-                }
-            }
-        }
-
-        async function pullDataFromSheetsSilently() {
-            if (!googleSheetsURL) return;
-            try {
-                const response = await fetch(googleSheetsURL + "?action=read");
-                if (!response.ok) throw new Error("Gagal mengambil data dari cloud");
-                
-                const res = await response.json();
-                if (res.status === 'success') {
-                    if (res.logbook) { 
-                        logbookData = res.logbook.map(item => {
-                            if (typeof item.photos === 'string') {
-                                try { 
-                                    item.photos = JSON.parse(item.photos); 
-                                } catch(e) { 
-                                    item.photos = []; 
-                                }
-                            }
-                            if (!Array.isArray(item.photos)) {
-                                item.photos = [];
-                            }
-                            return item;
-                        });
-                        localStorage.setItem('he_logbook_local', JSON.stringify(logbookData)); 
-                    }
-                    // PROTEKSI: Hanya overwrite usersData jika data dari spreadsheet valid dan tidak kosong
-                    if (res.users && Array.isArray(res.users) && res.users.length > 0) { 
-                        usersData = res.users; 
-                        localStorage.setItem('he_users_local', JSON.stringify(usersData)); 
-                    }
-                    renderData();
-                    updateSyncStatusUI(true);
-                }
-            } catch(e) {
-                console.log("Silent pull offline backup mode:", e.message);
-            }
-        }
-
-        function toggleSetupModal(show) { document.getElementById('setup-modal').className = show ? 'fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4' : 'hidden'; }
-        function saveSetupConfig() {
-            const rawURL = document.getElementById('sheet-api-url').value.trim();
-            if (rawURL && !rawURL.startsWith('https://script.google.com/')) {
-                showAlert('Format URL tidak valid!', 'error');
-                return;
-            }
-            googleSheetsURL = rawURL;
-            localStorage.setItem('he_sheets_url', googleSheetsURL);
-            toggleSetupModal(false);
-            updateSyncStatusUI(!!googleSheetsURL);
-            if (googleSheetsURL) syncDataWithSheets();
-        }
-
+        // =========================================================================
+        // 2. USER & SYSTEM CONFIGURATION FUNCTIONS
+        // =========================================================================
         function renderUsersList() {
-            const tbody = document.getElementById('users-table-body'); tbody.innerHTML = '';
-            const mobileContainer = document.getElementById('users-cards-mobile'); mobileContainer.innerHTML = '';
+            const tbody = document.getElementById('users-table-body'); 
+            const mobileContainer = document.getElementById('users-cards-mobile'); 
+            if (!tbody || !mobileContainer) return;
+            
+            tbody.innerHTML = ''; mobileContainer.innerHTML = '';
 
-            // Pastikan membaca data user yang paling up-to-date dari localStorage
             const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
 
             activeUsers.forEach(u => {
@@ -1153,7 +894,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="px-2 py-0.5 rounded text-[9px] font-bold ${u.role==='admin'?'bg-purple-100 text-purple-800':'bg-blue-100 text-blue-800'}">${u.role.toUpperCase()}</span>
-                            <button onclick="deleteUser('${u.username}')" class="text-red-500 font-bold hover:bg-red-50 p-1.5 rounded-lg transition">Hapus</button>
+                            <button onclick="deleteUser('${u.username}')" class="text-red-500 font-bold hover:bg-red-555 p-1.5 rounded-lg transition">Hapus</button>
                         </div>
                     </div>
                 `;
@@ -1168,14 +909,13 @@
             const password = document.getElementById('user-password').value.trim();
             const role = document.getElementById('user-role').value;
 
-            // Membaca ulang user dari memori sebelum didaftarkan kembali
             let activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
 
             if (activeUsers.find(x => x.username === username)) { showAlert('Username sudah digunakan!', 'error'); return; }
             
             const newUser = { username, name, password, role };
             activeUsers.push(newUser);
-            usersData = activeUsers; // Perbarui memori aktif
+            usersData = activeUsers;
 
             localStorage.setItem('he_users_local', JSON.stringify(activeUsers));
             document.getElementById('user-form').reset();
@@ -1204,31 +944,661 @@
             });
         }
 
-        function renderData() {
-            const tbody = document.getElementById('log-table-body');
-            const mobileContainer = document.getElementById('log-cards-mobile');
-            tbody.innerHTML = ''; mobileContainer.innerHTML = '';
+        function populateFormDropdowns() {
+            const specialtySelect = document.getElementById('job-specialty');
+            const maintenanceSelect = document.getElementById('job-maintenance-type');
+            if (!specialtySelect || !maintenanceSelect) return;
 
-            // Pembersihan tipe data photos sebelum render harian
-            logbookData = logbookData.map(item => {
-                if (typeof item.photos === 'string') {
-                    try { item.photos = JSON.parse(item.photos); } catch(e) { item.photos = []; }
-                }
-                if (!Array.isArray(item.photos)) {
-                    item.photos = [];
-                }
-                return item;
+            specialtySelect.innerHTML = `<option value="" disabled selected>Pilih Bidang...</option>`;
+            specialtiesData.forEach(item => {
+                specialtySelect.innerHTML += `<option value="${item}">${item}</option>`;
             });
 
-            if (logbookData.length === 0) {
+            maintenanceSelect.innerHTML = `<option value="" disabled selected>Pilih Jenis...</option>`;
+            maintenanceTypesData.forEach(item => {
+                maintenanceSelect.innerHTML += `<option value="${item}">${item}</option>`;
+            });
+        }
+
+        function renderDropdownManagementLists() {
+            const specListContainer = document.getElementById('specialties-list');
+            const maintListContainer = document.getElementById('maintenance-types-list');
+            if (!specListContainer || !maintListContainer) return;
+
+            specListContainer.innerHTML = '';
+            specialtiesData.forEach((item, index) => {
+                specListContainer.innerHTML += `
+                    <li class="flex items-center justify-between py-2 border-b last:border-0 border-slate-100">
+                        <span>${item}</span>
+                        <button onclick="removeSpecialtyOption(${index})" class="text-red-500 hover:text-red-700 transition" title="Hapus">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </li>
+                `;
+            });
+
+            maintListContainer.innerHTML = '';
+            maintenanceTypesData.forEach((item, index) => {
+                maintListContainer.innerHTML += `
+                    <li class="flex items-center justify-between py-2 border-b last:border-0 border-slate-100">
+                        <span>${item}</span>
+                        <button onclick="removeMaintenanceTypeOption(${index})" class="text-red-500 hover:text-red-700 transition" title="Hapus">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </li>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        function addSpecialtyOption(e) {
+            e.preventDefault();
+            if (currentRole !== 'admin') return;
+            const inputVal = document.getElementById('new-specialty').value.trim();
+            if (!inputVal) return;
+
+            if (specialtiesData.includes(inputVal)) {
+                showAlert('Spesialis bidang tersebut sudah ada!', 'error');
+                return;
+            }
+
+            specialtiesData.push(inputVal);
+            localStorage.setItem('he_specialties_local', JSON.stringify(specialtiesData));
+            document.getElementById('new-specialty').value = '';
+            renderDropdownManagementLists();
+            populateFormDropdowns();
+            showAlert('Spesialis bidang baru berhasil ditambahkan!', 'success');
+            if (googleSheetsURL) syncDataWithSheets(true);
+        }
+
+        function removeSpecialtyOption(index) {
+            if (currentRole !== 'admin') return;
+            showConfirmModal("Hapus Opsi Dropdown", "Yakin ingin menghapus opsi spesialis bidang ini?", function() {
+                specialtiesData.splice(index, 1);
+                localStorage.setItem('he_specialties_local', JSON.stringify(specialtiesData));
+                renderDropdownManagementLists();
+                populateFormDropdowns();
+                showAlert('Opsi spesialis bidang berhasil dihapus!', 'success');
+                if (googleSheetsURL) syncDataWithSheets(true);
+            });
+        }
+
+        function addMaintenanceTypeOption(e) {
+            e.preventDefault();
+            if (currentRole !== 'admin') return;
+            const inputVal = document.getElementById('new-maintenance').value.trim();
+            if (!inputVal) return;
+
+            if (maintenanceTypesData.includes(inputVal)) {
+                showAlert('Jenis pemeliharaan tersebut sudah ada!', 'error');
+                return;
+            }
+
+            maintenanceTypesData.push(inputVal);
+            localStorage.setItem('he_maintenance_types_local', JSON.stringify(maintenanceTypesData));
+            document.getElementById('new-maintenance').value = '';
+            renderDropdownManagementLists();
+            populateFormDropdowns();
+            showAlert('Jenis pemeliharaan baru berhasil ditambahkan!', 'success');
+            if (googleSheetsURL) syncDataWithSheets(true);
+        }
+
+        function removeMaintenanceTypeOption(index) {
+            if (currentRole !== 'admin') return;
+            showConfirmModal("Hapus Opsi Dropdown", "Yakin ingin menghapus opsi jenis pemeliharaan ini?", function() {
+                maintenanceTypesData.splice(index, 1);
+                localStorage.setItem('he_maintenance_types_local', JSON.stringify(maintenanceTypesData));
+                renderDropdownManagementLists();
+                populateFormDropdowns();
+                showAlert('Opsi jenis pemeliharaan berhasil dihapus!', 'success');
+                if (googleSheetsURL) syncDataWithSheets(true);
+            });
+        }
+
+        // =========================================================================
+        // 3. AUTHENTICATION & NAVIGATION FUNCTIONS (RESTORED & HOISTED)
+        // =========================================================================
+        function showSection(name) {
+            const loginSec = document.getElementById('login-section');
+            const dashSec = document.getElementById('dashboard-section');
+            if (loginSec) {
+                loginSec.className = name === 'login' ? 'max-w-md mx-auto my-8 bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden' : 'hidden';
+            }
+            if (dashSec) {
+                dashSec.className = name === 'dashboard' ? 'space-y-6' : 'hidden';
+            }
+        }
+
+        function switchTab(name) {
+            const btnLogbook = document.getElementById('btn-tab-logbook');
+            const btnUsers = document.getElementById('btn-tab-users');
+            const contentLogbook = document.getElementById('tab-content-logbook');
+            const contentUsers = document.getElementById('tab-content-users');
+
+            if (name === 'logbook') {
+                if (btnLogbook) btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
+                if (btnUsers) btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
+                if (contentLogbook) contentLogbook.className = "space-y-6";
+                if (contentUsers) contentUsers.className = "hidden";
+                
+                const syncBadge = document.getElementById('stat-sync');
+                const isS = syncBadge ? (syncBadge.innerText === "Cloud") : false;
+                const syncBanner = document.getElementById('sync-banner');
+                if (syncBanner) {
+                    if (isS) {
+                        syncBanner.classList.add('hidden');
+                    } else {
+                        syncBanner.classList.remove('hidden');
+                    }
+                }
+            } else {
+                if (btnUsers) btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
+                if (btnLogbook) btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
+                if (contentLogbook) contentLogbook.className = "hidden";
+                if (contentUsers) contentUsers.className = "space-y-6";
+                const syncBanner = document.getElementById('sync-banner');
+                if (syncBanner) syncBanner.classList.add('hidden'); 
+                renderUsersList();
+                renderDropdownManagementLists(); 
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('login-password').value;
+
+            const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
+            const user = activeUsers.find(u => u.username === usernameInput);
+
+            if (user && user.password === passwordInput) {
+                applyUserSession(user.role, user.name);
+                showAlert(`Selamat datang, ${user.name}!`, 'success');
+            } else {
+                showAlert('Username atau Password salah!', 'error');
+            }
+        }
+
+        function applyUserSession(role, name) {
+            currentRole = role;
+            currentUserName = name;
+            localStorage.setItem('he_session', JSON.stringify({role, name}));
+
+            document.getElementById('nav-user-name').innerText = name;
+            document.getElementById('nav-user-role').innerText = role === 'admin' ? 'Administrator' : 'Teknisi';
+            document.getElementById('user-nav').classList.remove('hidden');
+
+            const inputCol = document.getElementById('input-container-col');
+            const historyCol = document.getElementById('history-container-col');
+            const adminFields = document.getElementById('admin-only-fields');
+            const adminTabs = document.getElementById('admin-tabs');
+            const btnAdminAddJob = document.getElementById('btn-admin-add-job');
+            const btnAdminExport = document.getElementById('btn-admin-export');
+
+            if (role === 'admin') {
+                if (adminTabs) adminTabs.classList.remove('hidden');
+                if (btnAdminAddJob) btnAdminAddJob.classList.remove('hidden');
+                if (btnAdminExport) btnAdminExport.classList.remove('hidden');
+                if (inputCol) inputCol.classList.add('hidden');
+                if (historyCol) historyCol.className = "lg:col-span-3 space-y-6";
+                if (adminFields) adminFields.classList.remove('hidden');
+            } else {
+                if (adminTabs) adminTabs.classList.add('hidden');
+                if (btnAdminAddJob) btnAdminAddJob.classList.add('hidden');
+                if (btnAdminExport) btnAdminExport.classList.add('hidden');
+                if (inputCol) inputCol.classList.remove('hidden');
+                if (historyCol) historyCol.className = "lg:col-span-2 space-y-6";
+                if (adminFields) adminFields.classList.add('hidden');
+            }
+
+            populateFormDropdowns();
+            setTodayDate(); 
+
+            switchTab('logbook');
+            showSection('dashboard');
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) loginForm.reset();
+            
+            const pendingViewId = sessionStorage.getItem('pending_view_id');
+            if (pendingViewId) {
+                sessionStorage.removeItem('pending_view_id');
+                const filterSearch = document.getElementById('filter-search');
+                if (filterSearch) filterSearch.value = pendingViewId;
+                applyFilters();
+                setTimeout(() => {
+                    const el = document.getElementById('history-container-col');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            } else {
+                renderData();
+            }
+        }
+
+        // =========================================================================
+        // 4. DATABASE SYNC & API INTEGRATION FUNCTIONS
+        // =========================================================================
+        async function syncDataWithSheets(isSilent = false) {
+            if (!googleSheetsURL) {
+                if (!isSilent) showAlert('Konfigurasi URL Google Sheets belum disetel!', 'error');
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btn-submit');
+            let originalBtnHtml = "";
+            if (btnSubmit) {
+                originalBtnHtml = btnSubmit.innerHTML;
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = `
+                    <svg class="animate-spin h-4 w-4 text-white inline-block mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Mengunggah data...</span>
+                `;
+            }
+
+            if (!isSilent) {
+                showAlert('Sedang menghubungkan ke Google Sheets...', 'info');
+                const diagBox = document.getElementById('diagnostics-box');
+                if (diagBox) diagBox.classList.add('hidden');
+                const debugBox = document.getElementById('alert-debug');
+                if (debugBox) debugBox.classList.add('hidden');
+            }
+
+            try {
+                const formattedLogbook = logbookData.map(item => {
+                    return {
+                        ...item,
+                        photos: Array.isArray(item.photos) ? JSON.stringify(item.photos) : (item.photos || '[]')
+                    };
+                });
+
+                const response = await fetch(googleSheetsURL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    redirect: 'follow',
+                    headers: { 
+                        'Content-Type': 'text/plain;charset=utf-8' 
+                    },
+                    body: JSON.stringify({
+                        action: 'syncFull',
+                        logbook: formattedLogbook,
+                        users: usersData,
+                        specialties: specialtiesData, 
+                        maintenanceTypes: maintenanceTypesData
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Koneksi gagal dengan status: " + response.status);
+                }
+
+                const res = await response.json();
+                if (res.status === 'success') {
+                    if (res.logbook) {
+                        let incomingData = res.logbook.map(item => {
+                            if (typeof item.photos === 'string') {
+                                try { item.photos = JSON.parse(item.photos); } catch(e) { item.photos = []; }
+                            }
+                            if (!Array.isArray(item.photos)) {
+                                item.photos = [];
+                            }
+                            return item;
+                        });
+
+                        let mergedLogbook = [...logbookData];
+                        incomingData.forEach(cloudItem => {
+                            const index = mergedLogbook.findIndex(localItem => localItem.id === cloudItem.id);
+                            if (index !== -1) {
+                                mergedLogbook[index] = cloudItem; 
+                            } else {
+                                mergedLogbook.push(cloudItem); 
+                            }
+                        });
+
+                        mergedLogbook.sort((a, b) => b.id - a.id);
+                        logbookData = mergedLogbook;
+                        localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
+                    }
+                    if (res.users && res.users.length > 0) {
+                        let incomingUsers = res.users;
+                        let mergedUsers = [...usersData];
+                        incomingUsers.forEach(cloudUser => {
+                            const index = mergedUsers.findIndex(localUser => localUser.username === cloudUser.username);
+                            if (index !== -1) {
+                                mergedUsers[index] = cloudUser;
+                            } else {
+                                mergedUsers.push(cloudUser);
+                            }
+                        });
+                        usersData = mergedUsers;
+                        localStorage.setItem('he_users_local', JSON.stringify(usersData));
+                    }
+                    if (res.specialties && res.specialties.length > 0) {
+                        specialtiesData = res.specialties;
+                        localStorage.setItem('he_specialties_local', JSON.stringify(specialtiesData));
+                    }
+                    if (res.maintenanceTypes && res.maintenanceTypes.length > 0) {
+                        maintenanceTypesData = res.maintenanceTypes;
+                        localStorage.setItem('he_maintenance_types_local', JSON.stringify(maintenanceTypesData));
+                    }
+                    renderData();
+                    populateFormDropdowns();
+                    updateSyncStatusUI(true);
+                    if (!isSilent) showAlert('Sinkronisasi Google Sheets & Google Drive Berhasil!', 'success');
+                } else {
+                    if (!isSilent) showAlert('Gagal menyinkronkan data: ' + res.message, 'error');
+                }
+            } catch (err) {
+                console.error("Sync failed:", err);
+                if (!isSilent) {
+                    showAlert('Gagal Terhubung! Google Sheets menolak permintaan Anda.', 'error');
+                    const diagBox = document.getElementById('diagnostics-box');
+                    if (diagBox) diagBox.classList.remove('hidden');
+                    
+                    const debugBox = document.getElementById('alert-debug');
+                    if (debugBox) {
+                        debugBox.innerText = `Pesan Kesalahan: ${err.message}. Pastikan URL Apps Script valid, berakhiran "/exec", dan telah dideploy untuk publik ("Siapa saja/Anyone").`;
+                        debugBox.classList.remove('hidden');
+                    }
+                } else {
+                    updateSyncStatusUI(false);
+                }
+            } finally {
+                if (btnSubmit && originalBtnHtml) {
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerHTML = originalBtnHtml;
+                }
+            }
+        }
+
+        async function pullDataFromSheetsSilently() {
+            if (!googleSheetsURL) return;
+            try {
+                const response = await fetch(googleSheetsURL + "?action=read");
+                if (!response.ok) throw new Error("Gagal mengambil data dari cloud");
+                
+                const res = await response.json();
+                if (res.status === 'success') {
+                    if (res.logbook) { 
+                        let incomingLogbook = res.logbook.map(item => {
+                            if (typeof item.photos === 'string') {
+                                try { 
+                                    item.photos = JSON.parse(item.photos); 
+                                } catch(e) { 
+                                    item.photos = []; 
+                                }
+                            }
+                            if (!Array.isArray(item.photos)) {
+                                item.photos = [];
+                            }
+                            return item;
+                        });
+
+                        let mergedLogbook = [...logbookData];
+                        incomingLogbook.forEach(cloudItem => {
+                            const index = mergedLogbook.findIndex(localItem => localItem.id === cloudItem.id);
+                            if (index !== -1) {
+                                mergedLogbook[index] = cloudItem;
+                            } else {
+                                mergedLogbook.push(cloudItem);
+                            }
+                        });
+                        mergedLogbook.sort((a, b) => b.id - a.id);
+                        logbookData = mergedLogbook;
+                        localStorage.setItem('he_logbook_local', JSON.stringify(logbookData)); 
+                    }
+                    
+                    if (res.users && Array.isArray(res.users) && res.users.length > 0) { 
+                        let incomingUsers = res.users;
+                        let mergedUsers = [...usersData];
+                        incomingUsers.forEach(cloudUser => {
+                            const index = mergedUsers.findIndex(localUser => localUser.username === cloudUser.username);
+                            if (index !== -1) {
+                                mergedUsers[index] = cloudUser;
+                            } else {
+                                mergedUsers.push(cloudUser);
+                            }
+                        });
+                        usersData = mergedUsers; 
+                        localStorage.setItem('he_users_local', JSON.stringify(usersData)); 
+                    }
+
+                    if (res.specialties && Array.isArray(res.specialties) && res.specialties.length > 0) {
+                        specialtiesData = res.specialties;
+                        localStorage.setItem('he_specialties_local', JSON.stringify(specialtiesData));
+                    }
+                    if (res.maintenanceTypes && Array.isArray(res.maintenanceTypes) && res.maintenanceTypes.length > 0) {
+                        maintenanceTypesData = res.maintenanceTypes;
+                        localStorage.setItem('he_maintenance_types_local', JSON.stringify(maintenanceTypesData));
+                    }
+                    renderData();
+                    populateFormDropdowns();
+                    updateSyncStatusUI(true);
+                }
+            } catch(e) {
+                console.log("Silent pull offline backup mode:", e.message);
+            }
+        }
+
+        // =========================================================================
+        // 5. INPUT LOGBOOK & WORKFLOW MANAGEMENT FUNCTIONS
+        // =========================================================================
+        function submitPekerjaan(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-id').value;
+            const tanggal = document.getElementById('job-date').value;
+            const specialty = document.getElementById('job-specialty').value;
+            const maintenanceType = document.getElementById('job-maintenance-type').value;
+            const category = document.getElementById('job-category').value;
+            const area = document.getElementById('job-area').value.trim();
+            const detail = document.getElementById('job-detail').value.trim();
+            const shift = document.getElementById('job-shift').value;
+            const status = document.getElementById('job-status').value;
+            const timeStart = document.getElementById('job-time-start').value;
+            const timeFinish = document.getElementById('job-time-finish').value;
+            const adminNotes = document.getElementById('job-admin-notes').value.trim();
+
+            if (!category) {
+                showAlert('Pilih Kategori Area terlebih dahulu!', 'error');
+                return;
+            }
+
+            let originalTeknisi = currentUserName;
+            if (editId) {
+                const idx = logbookData.findIndex(item => item.id === editId);
+                if (idx !== -1) {
+                    let rawTeknisi = logbookData[idx].teknisi || currentUserName;
+                    const editIndex = rawTeknisi.indexOf(" (Diedit");
+                    if (editIndex !== -1) {
+                        rawTeknisi = rawTeknisi.substring(0, editIndex);
+                    }
+                    originalTeknisi = rawTeknisi;
+                }
+            }
+
+            let finalTeknisiValue = originalTeknisi;
+            if (originalTeknisi !== currentUserName) {
+                finalTeknisiValue = `${originalTeknisi} (Diedit oleh: ${currentUserName})`;
+            }
+
+            const job = {
+                id: editId || String(Date.now()),
+                timestamp: new Date().toLocaleString('id-ID'),
+                tanggal, specialty, maintenance_type: maintenanceType, category, area, detail, shift, status,
+                time_start: timeStart, time_finish: timeFinish, admin_notes: adminNotes,
+                photos: [...selectedPhotosBase64], 
+                teknisi: finalTeknisiValue
+            };
+
+            if (editId) {
+                const index = logbookData.findIndex(item => item.id === editId);
+                if (index !== -1) logbookData[index] = job;
+            } else {
+                logbookData.unshift(job);
+            }
+
+            localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
+            showAlert('Data tersimpan lokal di HP!', 'success');
+            resetForm();
+            renderData();
+
+            if (googleSheetsURL) {
+                syncDataWithSheets(false);
+            }
+        }
+
+        function prepareEdit(id) {
+            const log = logbookData.find(item => item.id === id); if (!log) return;
+            
+            if (currentRole !== 'admin' && log.status !== 'Selesai' && log.status !== 'Pending') {
+                showAlert('Hanya pekerjaan berstatus Pending yang dapat diedit oleh Teknisi!', 'error');
+                return;
+            }
+            if (currentRole !== 'admin' && log.status === 'Selesai') {
+                showAlert('Pekerjaan yang telah Selesai hanya dapat diedit oleh Administrator!', 'error');
+                return;
+            }
+
+            document.getElementById('input-container-col').classList.remove('hidden');
+            document.getElementById('history-container-col').className = "lg:col-span-2 space-y-6";
+
+            document.getElementById('edit-id').value = log.id;
+            document.getElementById('form-job-title').innerText = "Edit Pekerjaan Aktif";
+            document.getElementById('job-date').value = log.tanggal;
+            document.getElementById('job-specialty').value = log.specialty || '';
+            document.getElementById('job-maintenance-type').value = log.maintenance_type || '';
+            selectCategory(log.category);
+            document.getElementById('job-area').value = log.area;
+            document.getElementById('job-detail').value = log.detail;
+            document.getElementById('job-shift').value = log.shift;
+            document.getElementById('job-status').value = log.status;
+            document.getElementById('job-time-start').value = log.time_start || '';
+            document.getElementById('job-time-finish').value = log.time_finish || '';
+            document.getElementById('job-admin-notes').value = log.admin_notes || '';
+
+            if (Array.isArray(log.photos)) {
+                selectedPhotosBase64 = [...log.photos];
+            } else if (typeof log.photos === 'string') {
+                try { selectedPhotosBase64 = JSON.parse(log.photos) || []; } catch(e) { selectedPhotosBase64 = []; }
+            } else {
+                selectedPhotosBase64 = [];
+            }
+            renderPhotoPreviews();
+
+            const cancelBtn = document.getElementById('btn-cancel');
+            if (cancelBtn) {
+                cancelBtn.classList.remove('hidden');
+                cancelBtn.innerText = "Batal Edit";
+            }
+            
+            let originalTeknisi = log.teknisi || "";
+            const editIndex = originalTeknisi.indexOf(" (Diedit");
+            if (editIndex !== -1) {
+                originalTeknisi = originalTeknisi.substring(0, editIndex);
+            }
+            if (originalTeknisi && originalTeknisi !== currentUserName) {
+                showAlert(`Info: Pekerjaan ini milik ${originalTeknisi}. Nama Anda akan dicatat sebagai pengubah terakhir saat disimpan kembali.`, 'info');
+            }
+        }
+
+        function deletePekerjaan(id) {
+            if (currentRole !== 'admin') return;
+            showConfirmModal("Hapus Logbook", "Yakin ingin menghapus laporan logbook ini beserta seluruh fotonya di Google Drive secara permanen?", async function() {
+                // 1. Hapus data secara lokal di HP terlebih dahulu agar respon instan
+                logbookData = logbookData.filter(item => item.id !== id);
+                localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
+                renderData();
+                
+                // 2. Jika terhubung ke Cloud, kirim request penghapusan ke Google Sheets harian
+                if (googleSheetsURL) {
+                    showAlert('Sedang menghapus data di Google Sheets & Google Drive...', 'info');
+                    try {
+                        const response = await fetch(googleSheetsURL, {
+                            method: 'POST',
+                            mode: 'cors',
+                            redirect: 'follow',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({
+                                action: 'delete',
+                                id: id
+                            })
+                        });
+                        const res = await response.json();
+                        if (res.status === 'success') {
+                            showAlert('Laporan & file foto Google Drive berhasil terhapus secara permanen!', 'success');
+                        } else {
+                            showAlert('Data terhapus di HP. Gagal menghapus di cloud: ' + res.message, 'error');
+                        }
+                    } catch (err) {
+                        console.warn("Gagal terhubung ke cloud, data terhapus secara lokal di HP saja.", err.message);
+                        showAlert('Data terhapus secara lokal di HP saja.', 'info');
+                    }
+                    // Jalankan silent pull untuk memastikan kebersihan harian
+                    pullDataFromSheetsSilently();
+                } else {
+                    // Jika offline/tanpa cloud
+                    logbookData = logbookData.filter(item => item.id !== id);
+                    localStorage.setItem('he_logbook_local', JSON.stringify(logbookData));
+                    renderData();
+                    showAlert('Laporan berhasil terhapus secara lokal!', 'success');
+                }
+            });
+        }
+
+        // =========================================================================
+        // 6. UI RENDERING & DATA BINDING (DIPERBAIKI: PARSING LOGBOOKDATA & SPREADSHEET SECARA KOKOH)
+        // =========================================================================
+        function renderData(dataToRender) {
+            const tbody = document.getElementById('log-table-body');
+            const mobileContainer = document.getElementById('log-cards-mobile');
+            if (!tbody || !mobileContainer) return;
+            
+            tbody.innerHTML = ''; mobileContainer.innerHTML = '';
+
+            // Pastikan database lokal disortir ulang harian
+            const displayData = dataToRender || logbookData;
+
+            if (displayData.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
             } else {
                 document.getElementById('empty-state').classList.add('hidden');
-                logbookData.forEach(item => {
-                    let pList = item.photos || [];
-                    let pGHtml = pList.map(b => `<img src="${b}" onclick="openLightbox('${b}')" class="w-10 h-10 object-cover border rounded-lg cursor-pointer transform hover:scale-105 transition shadow-sm">`).join(' ');
+                displayData.forEach(item => {
+                    // AMAN & KUAT: Pemecahan parsing bertingkat untuk mendeteksi array foto dari database lokal maupun cloud
+                    let pList = [];
+                    if (item.photos) {
+                        if (Array.isArray(item.photos)) {
+                            pList = item.photos;
+                        } else if (typeof item.photos === 'string') {
+                            try {
+                                // Tangani pembungkus string ganda (double-escaped string) dari baris spreadsheet
+                                let cleanPhotosStr = item.photos.trim();
+                                if (cleanPhotosStr.startsWith('"') && cleanPhotosStr.endsWith('"')) {
+                                    cleanPhotosStr = JSON.parse(cleanPhotosStr);
+                                }
+                                pList = JSON.parse(cleanPhotosStr) || [];
+                            } catch(e) {
+                                // Jika parsing string JSON gagal, buat array berisi string mentah
+                                if (item.photos.startsWith('[') && item.photos.endsWith(']')) {
+                                    pList = [];
+                                } else {
+                                    pList = [item.photos];
+                                }
+                            }
+                        }
+                    }
 
-                    // Memberikan tombol Aksi dinamis (Teknisi biasa hanya punya tombol edit jika berstatus "Pending")
+                    // Hanya render elemen gambar jika ada foto di dalam array pList
+                    let pGHtml = '';
+                    if (Array.isArray(pList) && pList.length > 0) {
+                        pGHtml = pList.map(b => {
+                            if (!b) return '';
+                            // Normalisasi tautan gambar Drive jika string terbungkus tanda kutip
+                            let cleanUrl = b.toString().trim().replace(/^"|"$/g, '');
+                            return `<img src="${cleanUrl}" onclick="openLightbox('${cleanUrl}')" class="w-10 h-10 object-cover border border-slate-200 rounded-lg cursor-pointer transform hover:scale-105 transition shadow-sm" onerror="this.src='https://unpkg.com/lucide@latest/icons/image-off.svg'; this.className='w-10 h-10 object-contain p-2 bg-slate-100 rounded-lg opacity-40';">`;
+                        }).join(' ');
+                    }
+
                     let actionHtml = '';
                     if (currentRole === 'admin') {
                         actionHtml = `
@@ -1243,28 +1613,40 @@
                         actionHtml = `<span class="text-slate-300 font-bold">-</span>`;
                     }
 
+                    const cleanStart = formatCleanTime(item.time_start);
+                    const cleanFinish = formatCleanTime(item.time_finish);
+                    const durationText = calculateDuration(item.time_start, item.time_finish);
+                    const durationBadge = durationText ? `<span class="inline-flex items-center px-2 py-0.5 text-[10px] font-extrabold bg-indigo-50 text-indigo-700 rounded-md border border-indigo-100">${durationText}</span>` : '';
+                    
+                    const timeFormatted = `<div class="flex flex-col items-start space-y-1">
+                        <span class="font-bold text-slate-700 flex items-center gap-1">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+                            ${cleanStart} - ${cleanFinish}
+                        </span>
+                        ${durationBadge}
+                    </div>`;
+
                     tbody.innerHTML += `
                         <tr class="border-b hover:bg-slate-50/50 transition">
-                            <td class="p-4 font-bold text-slate-800">${item.tanggal}<br><span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">${item.shift}</span></td>
+                            <td class="p-4 font-bold text-slate-800">${formatOnlyDate(item.tanggal)}<br><span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">${item.shift}</span></td>
                             <td class="p-4 font-bold text-slate-700">${item.specialty || 'Umum'}<br><span class="inline-flex mt-1 text-[9px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">${item.maintenance_type || 'Corrective'}</span></td>
-                            <td class="p-4 text-slate-600 font-semibold">${item.time_start || '--:--'} s/d ${item.time_finish || '--:--'}</td>
+                            <td class="p-4">${timeFormatted}</td>
                             <td class="p-4 text-slate-600 font-semibold">${item.teknisi}</td>
                             <td class="p-4"><span class="inline-flex items-center space-x-1 text-[9px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span><p class="text-xs font-bold text-slate-800 mt-1.5">${item.area}</p></td>
-                            <td class="p-4 max-w-xs"><p class="text-xs font-medium leading-relaxed">${item.detail}</p><div class="flex gap-1.5 mt-2">${pGHtml}</div></td>
+                            <td class="p-4 max-w-xs"><p class="text-xs font-medium leading-relaxed">${item.detail}</p><div class="flex flex-wrap gap-1.5 mt-2.5">${pGHtml}</div></td>
                             <td class="p-4 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-100':'bg-amber-50 text-amber-800 border-amber-100'}">${item.status}</span></td>
                             <td class="p-4 text-right">${actionHtml}</td>
                         </tr>
                     `;
                     
-                    // Aksi untuk Layout Mobile harian (DIPROPOSIONALKAN)
                     let mobileActionHtml = '';
                     if (currentRole === 'admin') {
                         mobileActionHtml = `
                             <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
-                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition animate-transition">
                                     <i data-lucide="edit" class="w-3.5 h-3.5"></i><span>Edit</span>
                                 </button>
-                                <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-4 py-2 bg-red-50 rounded-xl hover:bg-red-100 text-xs flex items-center space-x-1.5 transition">
+                                <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-4 py-2 bg-red-50 rounded-xl hover:bg-red-100 text-xs flex items-center space-x-1.5 transition animate-transition">
                                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i><span>Hapus</span>
                                 </button>
                             </div>
@@ -1272,7 +1654,7 @@
                     } else if (item.status === 'Pending') {
                         mobileActionHtml = `
                             <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
-                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition animate-transition">
                                     <i data-lucide="edit" class="w-3.5 h-3.5"></i><span>Edit Laporan</span>
                                 </button>
                             </div>
@@ -1293,174 +1675,68 @@
                                 <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">Tipe: ${item.maintenance_type || 'Corrective'}</span>
                             </div>
                             <p class="text-xs text-slate-600 leading-relaxed font-medium">${item.detail}</p>
-                            <div class="flex gap-2 py-1 overflow-x-auto">${pGHtml}</div>
-                            <div class="bg-slate-50/50 border p-2 rounded-xl text-[10px] flex justify-between items-center text-slate-500 font-bold">
-                                <span>Jam Kerja: ${item.time_start || '--:--'} s/d ${item.time_finish || '--:--'}</span>
-                                <span>Shift: ${item.shift}</span>
+                            <div class="flex flex-wrap gap-2 py-1 overflow-x-auto">${pGHtml}</div>
+                            <div class="bg-slate-50/50 border border-slate-100 p-2 rounded-xl text-[10px] flex justify-between items-center text-slate-500 font-bold">
+                                <span class="flex items-center gap-1">
+                                    <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+                                    Jam Kerja: ${cleanStart} s/d ${cleanFinish}
+                                </span>
+                                ${durationText ? `<span class="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 text-[10px] font-extrabold">${durationText}</span>` : '<span>Shift: ' + item.shift + '</span>'}
                             </div>
                             <div class="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wide">
-                                <span>Oleh: ${item.teknisi}</span><span>${item.tanggal}</span>
+                                <span>Oleh: ${item.teknisi}</span>
+                                <span>${formatOnlyDate(item.tanggal)}</span>
                             </div>
                             ${mobileActionHtml}
                         </div>
                     `;
                 });
-                lucide.createIcons(); // Re-render icons inside new items
+                lucide.createIcons();
             }
             document.getElementById('stat-total').innerText = logbookData.length;
             document.getElementById('stat-selesai').innerText = logbookData.filter(i=>i.status==='Selesai').length;
         }
 
-        function applyFilters() {
-            const searchQuery = document.getElementById('filter-search').value.toLowerCase();
-            const categoryQuery = document.getElementById('filter-category').value;
-            const statusQuery = document.getElementById('filter-status').value;
+        // =========================================================================
+        // 7. WINDOW ONLOAD INITIALIZATION
+        // =========================================================================
+        window.onload = function() {
+            lucide.createIcons();
+            setTodayDate();
 
-            const filtered = logbookData.filter(item => {
-                const matchesSearch = item.area.toLowerCase().includes(searchQuery) || 
-                                      item.detail.toLowerCase().includes(searchQuery) ||
-                                      item.teknisi.toLowerCase().includes(searchQuery) ||
-                                      (item.specialty && item.specialty.toLowerCase().includes(searchQuery)) ||
-                                      item.id.toLowerCase() === searchQuery;
-                const matchesCategory = categoryQuery === "" || item.category === categoryQuery;
-                const matchesStatus = statusQuery === "" || item.status === statusQuery;
-
-                return matchesSearch && matchesCategory && matchesStatus;
-            });
-
-            renderData(filtered);
-        }
-
-        function clearFilters() {
-            document.getElementById('filter-search').value = '';
-            document.getElementById('filter-category').value = '';
-            document.getElementById('filter-status').value = '';
-            renderData(logbookData);
-        }
-
-        // Fungsi pembersih karakter berbahaya XML untuk Microsoft Excel
-        function escapeHTML(str) {
-            if (!str) return '';
-            return str.toString()
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        // --- EXPORT TO EXCEL ---
-        function exportToExcel() {
-            if (currentRole !== 'admin') {
-                showAlert('Hanya Administrator yang diperbolehkan mengekspor data!', 'error');
-                return;
+            const urlParams = new URLSearchParams(window.location.search);
+            const apiParam = urlParams.get('api');
+            const viewParam = urlParams.get('view');
+            
+            if (apiParam && apiParam.startsWith('https://script.google.com/')) {
+                googleSheetsURL = apiParam.trim();
+                localStorage.setItem('he_sheets_url', googleSheetsURL);
+                window.history.replaceState({}, document.title, window.location.pathname);
+                showAlert('Database terhubung otomatis via Link khusus!', 'success');
             }
 
-            const appBaseUrl = window.location.origin + window.location.pathname;
+            if (viewParam) {
+                sessionStorage.setItem('pending_view_id', viewParam);
+            }
 
-            let excelTemplate = `
-                <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-                <head>
-                    <meta charset="utf-8">
-                    <!--[if gte mso 9]>
-                    <xml>
-                        <x:ExcelWorkbook>
-                            <x:ExcelWorksheets>
-                                <x:ExcelWorksheet>
-                                    <x:Name>Logbook Engineering</x:Name>
-                                    <x:WorksheetOptions>
-                                        <x:DisplayGridlines/>
-                                    </x:WorksheetOptions>
-                                </x:ExcelWorksheet>
-                            </x:ExcelWorksheets>
-                        </x:ExcelWorkbook>
-                    </xml>
-                    <![endif]-->
-                    <style>
-                        table { border-collapse: collapse; font-family: 'Segoe UI', Arial, sans-serif; }
-                        th { background-color: #4f46e5; color: white; font-weight: bold; border: 1px solid #cbd5e1; padding: 10px; text-align: left; }
-                        td { border: 1px solid #cbd5e1; padding: 10px; vertical-align: top; }
-                    </style>
-                </head>
-                <body>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID Pekerjaan</th>
-                                <th>Tanggal</th>
-                                <th>Shift</th>
-                                <th>Teknisi</th>
-                                <th>Bidang Spesialis</th>
-                                <th>Jenis Pemeliharaan</th>
-                                <th>Kategori</th>
-                                <th>Area / Lokasi</th>
-                                <th>Detail Pekerjaan</th>
-                                <th>Jam Mulai</th>
-                                <th>Jam Selesai</th>
-                                <th>Status</th>
-                                <th>Tautan Lampiran Foto (Aman & Ringan)</th>
-                                <th>Catatan Admin</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
+            if (googleSheetsURL) {
+                const sheetApiUrlInput = document.getElementById('sheet-api-url');
+                if (sheetApiUrlInput) sheetApiUrlInput.value = googleSheetsURL;
+                updateSyncStatusUI(true);
+                pullDataFromSheetsSilently();
+            } else {
+                updateSyncStatusUI(false);
+            }
 
-            logbookData.forEach(item => {
-                let pList = [];
-                if (item.photos) {
-                    if (Array.isArray(item.photos)) {
-                        pList = item.photos;
-                    } else if (typeof item.photos === 'string') {
-                        try { pList = JSON.parse(item.photos) || []; } catch(e) { pList = []; }
-                    }
-                }
+            const savedSession = JSON.parse(localStorage.getItem('he_session'));
+            if (savedSession) {
+                applyUserSession(savedSession.role, savedSession.name);
+            } else {
+                showSection('login');
+            }
 
-                const deepLinkUrl = `${appBaseUrl}?view=${item.id}`;
-                const linkLabel = pList.length > 0 ? `Buka Foto (${pList.length} Foto)` : 'Tidak Ada Foto';
-                const linkHtml = pList.length > 0 
-                    ? `<a href="${deepLinkUrl}" style="color: #4f46e5; font-weight: bold; text-decoration: underline;">${linkLabel}</a>` 
-                    : '<span style="color: #94a3b8;">Tidak Ada Foto</span>';
-
-                excelTemplate += `
-                    <tr>
-                        <td style="mso-number-format:'\\@';">${escapeHTML(item.id)}</td>
-                        <td>${escapeHTML(item.tanggal)}</td>
-                        <td>${escapeHTML(item.shift)}</td>
-                        <td>${escapeHTML(item.teknisi)}</td>
-                        <td>${escapeHTML(item.specialty)}</td>
-                        <td>${escapeHTML(item.maintenance_type)}</td>
-                        <td>${escapeHTML(item.category)}</td>
-                        <td>${escapeHTML(item.area)}</td>
-                        <td>${escapeHTML(item.detail)}</td>
-                        <td>${escapeHTML(item.time_start)}</td>
-                        <td>${escapeHTML(item.time_finish)}</td>
-                        <td>${escapeHTML(item.status)}</td>
-                        <td>${linkHtml}</td>
-                        <td>${escapeHTML(item.admin_notes)}</td>
-                    </tr>
-                `;
-            });
-
-            excelTemplate += `
-                        </tbody>
-                    </table>
-                </body>
-                </html>
-            `;
-
-            const blob = new Blob([excelTemplate], { type: 'application/vnd.ms-excel;charset=utf-8;' });
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-            link.setAttribute("download", `Logbook_Engineering_${dateStr}.xls`);
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showAlert('Laporan berhasil diekspor ke Excel dengan Tautan Foto Aman!', 'success');
-        }
+            renderData();
+        };
     </script>
 </body>
 </html>
