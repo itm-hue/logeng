@@ -1174,6 +1174,16 @@
             }
         }
 
+        // DIPERBAIKI: Fungsi logout() ditambahkan kembali di sini agar bisa dieksekusi saat tombol Keluar diklik
+        function logout() {
+            localStorage.removeItem('he_session');
+            currentRole = null;
+            currentUserName = null;
+            const userNav = document.getElementById('user-nav');
+            if (userNav) userNav.classList.add('hidden');
+            showSection('login');
+        }
+
         // =========================================================================
         // 4. DATABASE SYNC & API INTEGRATION FUNCTIONS
         // =========================================================================
