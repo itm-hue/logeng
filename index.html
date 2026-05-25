@@ -10,35 +10,38 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #f8fafc;
+        }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+<body class="text-slate-800 min-h-screen flex flex-col antialiased">
 
-    <!-- HEADER / NAVIGASI -->
-    <header class="bg-gradient-to-r from-indigo-950 via-indigo-900 to-slate-900 text-white shadow-lg sticky top-0 z-50 border-b border-indigo-800/50 backdrop-blur-md">
+    <!-- HEADER / NAVIGASI (UI Premium) -->
+    <header class="bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-white shadow-md sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-opacity-95">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3 group">
-                <div class="bg-gradient-to-br from-amber-400 to-amber-500 p-2.5 rounded-xl text-indigo-950 shadow-md shadow-amber-500/20 transform group-hover:scale-105 transition-all duration-300">
+                <div class="bg-gradient-to-br from-amber-400 to-orange-500 p-2.5 rounded-2xl text-slate-950 shadow-lg shadow-orange-500/20 transform group-hover:scale-105 transition-all duration-300">
                     <i data-lucide="wrench" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white to-indigo-100 bg-clip-text text-transparent">HE-Logbook</h1>
-                    <p class="text-[10px] text-indigo-300 font-medium uppercase tracking-wider">Hotel Engineering System</p>
+                    <h1 class="font-extrabold text-lg tracking-tight bg-gradient-to-r from-white to-slate-200 bg-clip-text text-transparent">HE-Logbook</h1>
+                    <p class="text-[9px] text-amber-400 font-bold uppercase tracking-widest">Hotel Engineering System</p>
                 </div>
             </div>
             
-            <!-- User Profile & Logout -->
-            <div id="user-nav" class="hidden flex items-center space-x-4">
-                <div class="text-right hidden sm:block border-r border-indigo-800/80 pr-4">
+            <!-- Profile Pengguna & Tombol Keluar -->
+            <div id="user-nav" class="hidden flex items-center space-x-3 sm:space-x-4">
+                <div class="text-right hidden sm:block border-r border-white/10 pr-4">
                     <p id="nav-user-name" class="font-bold text-sm text-white leading-tight">-</p>
-                    <span id="nav-user-role" class="inline-flex items-center px-2 py-0.5 mt-1 text-[10px] font-semibold bg-amber-500/15 text-amber-400 rounded-full border border-amber-500/30 capitalize">-</span>
+                    <span id="nav-user-role" class="inline-flex items-center px-2 py-0.5 mt-1 text-[10px] font-bold bg-amber-400/10 text-amber-400 rounded-full border border-amber-400/20 capitalize">-</span>
                 </div>
-                <button onclick="logout()" class="bg-red-500/10 hover:bg-red-600 text-red-400 hover:text-white px-3.5 py-2 rounded-xl transition-all duration-200 text-sm border border-red-500/20 font-bold active:scale-95">
+                <button onclick="logout()" class="bg-red-500/10 hover:bg-red-550 text-red-400 hover:text-white px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 text-xs sm:text-sm border border-red-500/20 font-bold active:scale-95">
                     Keluar
                 </button>
             </div>
@@ -46,10 +49,10 @@
     </header>
 
     <!-- MAIN CONTAINER -->
-    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
         
-        <!-- ALERT BOX -->
-        <div id="alert-box" class="hidden mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-sm transition-all duration-300 transform translate-y-0">
+        <!-- ALERT BOX (UI Notifikasi) -->
+        <div id="alert-box" class="hidden mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-md transition-all duration-300 transform translate-y-0">
             <div id="alert-icon-container" class="mt-0.5"></div>
             <div class="flex-1">
                 <p id="alert-message" class="text-xs font-semibold"></p>
@@ -70,15 +73,15 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-medium text-slate-700 pt-2">
-                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-2xs">
+                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-sm">
                     <span class="text-red-600 font-extrabold text-sm">Langkah 1</span>
                     <p class="mt-1">Di Apps Script Anda, klik tombol <strong>Deploy</strong> > <strong>Manage Deployments</strong>.</p>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-2xs">
+                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-sm">
                     <span class="text-red-600 font-extrabold text-sm">Langkah 2</span>
                     <p class="mt-1">Ubah akses <strong>Who has access</strong> menjadi <strong>Anyone</strong> (Siapa Saja) dan klik Deploy.</p>
                 </div>
-                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-2xs">
+                <div class="bg-white p-4 rounded-2xl border border-red-100 shadow-sm">
                     <span class="text-red-600 font-extrabold text-sm">Langkah 3</span>
                     <p class="mt-1">Jalankan fungsi <code>doGet</code> atau <code>doPost</code> sekali di editor Apps Script untuk menyetujui izin keamanan Google.</p>
                 </div>
@@ -89,14 +92,14 @@
         </div>
 
         <!-- SECTION 1: LOGIN PAGE -->
-        <section id="login-section" class="max-w-md mx-auto my-12 bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
-            <div class="p-8">
+        <section id="login-section" class="max-w-md mx-auto my-8 bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+            <div class="p-6 sm:p-8">
                 <div class="text-center mb-8">
-                    <div class="inline-flex p-4 bg-indigo-50 text-indigo-600 rounded-2xl mb-4">
+                    <div class="inline-flex p-4 bg-indigo-50 text-indigo-600 rounded-3xl mb-4 shadow-inner">
                         <i data-lucide="shield-check" class="w-10 h-10"></i>
                     </div>
                     <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Login Staff Engineering</h2>
-                    <p class="text-xs text-slate-500 mt-1.5 font-medium">Gunakan akun terdaftar Anda untuk mengakses sistem</p>
+                    <p class="text-xs text-slate-500 mt-2 font-medium">Gunakan akun terdaftar Anda untuk mengakses sistem</p>
                 </div>
                 
                 <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
@@ -106,7 +109,7 @@
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                 <i data-lucide="user" class="w-4 h-4"></i>
                             </span>
-                            <input type="text" id="login-username" placeholder="Masukkan username..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-medium" required>
+                            <input type="text" id="login-username" placeholder="Masukkan username..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-sm font-medium transition" required>
                         </div>
                     </div>
                     <div>
@@ -115,10 +118,10 @@
                             <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                                 <i data-lucide="lock" class="w-4 h-4"></i>
                             </span>
-                            <input type="password" id="login-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-medium" required>
+                            <input type="password" id="login-password" placeholder="••••••••" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-sm font-medium transition" required>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg flex items-center justify-center space-x-2 active:scale-95 transform">
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 active:scale-95 transform">
                         <span>Masuk Aplikasi</span>
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
@@ -126,74 +129,74 @@
             </div>
             <div class="bg-slate-50 px-8 py-4 border-t border-slate-100 text-center flex items-center justify-center space-x-2">
                 <i data-lucide="lock" class="w-3.5 h-3.5 text-slate-400"></i>
-                <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Aman • Terenkripsi Lokal</span>
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Aman • Terenkripsi Lokal</span>
             </div>
         </section>
 
-        <!-- SECTION 2: APP DASHBOARD (HIDDEN BY DEFAULT) -->
-        <section id="dashboard-section" class="hidden space-y-8">
+        <!-- SECTION 2: APP DASHBOARD -->
+        <section id="dashboard-section" class="hidden space-y-6">
             
-            <!-- ADMIN ONLY TABS NAVIGATION -->
+            <!-- TAB NAVIGASI KHUSUS ADMIN -->
             <div id="admin-tabs" class="hidden bg-white p-1.5 rounded-2xl border border-slate-200/60 shadow-sm flex space-x-2">
-                <button id="btn-tab-logbook" onclick="switchTab('logbook')" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
-                    <i data-lucide="clipboard-list" class="w-4.5 h-4.5"></i>
+                <button id="btn-tab-logbook" onclick="switchTab('logbook')" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
                     <span>Logbook Pekerjaan</span>
                 </button>
-                <button id="btn-tab-users" onclick="switchTab('users')" class="flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
-                    <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                <button id="btn-tab-users" onclick="switchTab('users')" class="flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition-all duration-300">
+                    <i data-lucide="users" class="w-4 h-4"></i>
                     <span>Kelola Pengguna</span>
                 </button>
             </div>
 
-            <!-- SPREADSHEET INTEGRATION BANNER -->
-            <div id="sync-banner" class="bg-gradient-to-r from-emerald-50 via-emerald-50/50 to-white border border-emerald-200 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm relative overflow-hidden group">
+            <!-- BANNER INTEGRASI SPREADSHEET (Otomatis Sembunyi/Muncul) -->
+            <div id="sync-banner" class="bg-gradient-to-r from-emerald-50 via-emerald-50/30 to-white border border-emerald-200 rounded-3xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm relative overflow-hidden group">
                 <div class="flex items-start space-x-4">
-                    <div class="bg-emerald-500 text-white p-3 rounded-2xl shadow-md">
+                    <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white p-3 rounded-2xl shadow-md">
                         <i data-lucide="sheet" class="w-5 h-5"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-emerald-950">Koneksi Database Cloud</h3>
-                        <p id="banner-status-text" class="text-xs text-emerald-700 mt-1 font-medium">Memeriksa database...</p>
+                        <h3 class="font-extrabold text-slate-900 tracking-tight text-sm sm:text-base">Koneksi Database Cloud</h3>
+                        <p id="banner-status-text" class="text-xs text-slate-500 mt-1 font-medium">Memeriksa database...</p>
                     </div>
                 </div>
-                <button onclick="toggleSetupModal(true)" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-3 rounded-xl font-bold text-xs shadow-md shadow-emerald-600/10 flex items-center justify-center space-x-2 active:scale-95">
+                <button onclick="toggleSetupModal(true)" class="bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl font-bold text-xs shadow-sm border border-slate-200 flex items-center justify-center space-x-2 active:scale-95 transition">
                     <i data-lucide="settings" class="w-4 h-4"></i>
                     <span>Pengaturan Manual</span>
                 </button>
             </div>
 
             <!-- TAB PANEL 1: LOGBOOK MAIN LAYOUT -->
-            <div id="tab-content-logbook" class="space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div id="tab-content-logbook" class="space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
                     <!-- COLUMN 1: FORM INPUT -->
                     <div id="input-container-col" class="lg:col-span-1">
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100/85 sticky top-24">
-                            <div class="flex items-center space-x-2 pb-4 mb-6 border-b border-slate-100">
-                                <i data-lucide="plus-circle" class="w-6 h-6 text-indigo-600"></i>
-                                <h2 id="form-job-title" class="text-base font-bold text-slate-800">Input Pekerjaan Baru</h2>
+                        <div class="bg-white p-5 sm:p-6 rounded-3xl shadow-sm border border-slate-100/85 sticky top-24">
+                            <div class="flex items-center space-x-2 pb-4 mb-5 border-b border-slate-100">
+                                <i data-lucide="plus-circle" class="w-5 h-5 text-indigo-600"></i>
+                                <h2 id="form-job-title" class="text-sm sm:text-base font-extrabold text-slate-800">Input Pekerjaan Baru</h2>
                             </div>
                             
-                            <form id="logbook-form" onsubmit="submitPekerjaan(event)" class="space-y-5">
+                            <form id="logbook-form" onsubmit="submitPekerjaan(event)" class="space-y-4">
                                 <input type="hidden" id="edit-id" value="">
                                 
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tanggal Pekerjaan (Otomatis)</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tanggal Pekerjaan (Otomatis)</label>
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                             <i data-lucide="calendar" class="w-4 h-4"></i>
                                         </span>
-                                        <!-- DIPERBAIKI: Menggunakan pointer-events-none, tabindex, dan event prevention agar 100% read-only di semua perangkat HP -->
-                                        <input type="date" id="job-date" class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed text-sm focus:outline-none font-semibold pointer-events-none" readonly tabindex="-1" onclick="event.preventDefault(); return false;" onfocus="this.blur();">
+                                        <!-- DIPERBAIKI: Menggunakan pointer-events-none, tabindex, dan event prevention agar 100% read-only di semua HP -->
+                                        <input type="date" id="job-date" class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed text-xs focus:outline-none font-bold pointer-events-none" readonly tabindex="-1" onclick="event.preventDefault(); return false;" onfocus="this.blur();">
                                     </div>
                                 </div>
 
                                 <!-- SPESIALIS BIDANG & JENIS PEMELIHARAAN -->
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Spesialis Bidang</label>
-                                        <select id="job-specialty" class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-xs font-semibold" required>
-                                            <option value="" disabled selected>Pilih Bidang...</option>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Spesialis Bidang</label>
+                                        <select id="job-specialty" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
+                                            <option value="" disabled selected>Pilih...</option>
                                             <option value="Sipil / Konstruksi">Sipil / Konstruksi</option>
                                             <option value="Elektrikal">Elektrikal</option>
                                             <option value="Plumbing">Plumbing</option>
@@ -203,9 +206,9 @@
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Jenis Pemeliharaan</label>
-                                        <select id="job-maintenance-type" class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-xs font-semibold" required>
-                                            <option value="" disabled selected>Pilih Jenis...</option>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jenis Pemeliharaan</label>
+                                        <select id="job-maintenance-type" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
+                                            <option value="" disabled selected>Pilih...</option>
                                             <option value="Corrective (Perbaikan)">Corrective (Perbaikan)</option>
                                             <option value="Preventive (Perawatan)">Preventive (Perawatan)</option>
                                             <option value="Instalasi">Instalasi</option>
@@ -214,18 +217,18 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Kategori Area</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Kategori Area</label>
                                     <div class="grid grid-cols-3 gap-2">
-                                        <button type="button" onclick="selectCategory('Guest Room')" id="cat-room" class="py-3 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1.5 hover:bg-slate-50 border-slate-200 text-slate-600">
-                                            <i data-lucide="bed-double" class="w-4.5 h-4.5"></i>
+                                        <button type="button" onclick="selectCategory('Guest Room')" id="cat-room" class="py-2.5 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1 hover:bg-slate-50 border-slate-200 text-slate-600 bg-white">
+                                            <i data-lucide="bed-double" class="w-4 h-4"></i>
                                             <span>Guest Room</span>
                                         </button>
-                                        <button type="button" onclick="selectCategory('Meeting Room')" id="cat-meeting" class="py-3 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1.5 hover:bg-slate-50 border-slate-200 text-slate-600">
-                                            <i data-lucide="presentation" class="w-4.5 h-4.5"></i>
+                                        <button type="button" onclick="selectCategory('Meeting Room')" id="cat-meeting" class="py-2.5 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1 hover:bg-slate-50 border-slate-200 text-slate-600 bg-white">
+                                            <i data-lucide="presentation" class="w-4 h-4"></i>
                                             <span>Meeting Rm</span>
                                         </button>
-                                        <button type="button" onclick="selectCategory('Public Area')" id="cat-public" class="py-3 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1.5 hover:bg-slate-50 border-slate-200 text-slate-600">
-                                            <i data-lucide="users" class="w-4.5 h-4.5"></i>
+                                        <button type="button" onclick="selectCategory('Public Area')" id="cat-public" class="py-2.5 px-2 rounded-xl border text-[10px] font-bold text-center transition-all duration-200 flex flex-col items-center justify-center space-y-1 hover:bg-slate-50 border-slate-200 text-slate-600 bg-white">
+                                            <i data-lucide="users" class="w-4 h-4"></i>
                                             <span>Public Area</span>
                                         </button>
                                     </div>
@@ -233,38 +236,38 @@
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nama Area / Nomor Kamar</label>
-                                    <input type="text" id="job-area" placeholder="Contoh: Kamar 305, Lobby, dll" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-medium" required>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nama Area / Nomor Kamar</label>
+                                    <input type="text" id="job-area" placeholder="Contoh: Kamar 305, Lobby, dll" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
                                 </div>
 
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Detail Pekerjaan</label>
-                                    <textarea id="job-detail" rows="3" placeholder="Deskripsikan perbaikan atau pemeliharaan yang dikerjakan..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-medium" required></textarea>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Detail Pekerjaan</label>
+                                    <textarea id="job-detail" rows="3" placeholder="Deskripsikan perbaikan atau pemeliharaan..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-medium" required></textarea>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Jam Mulai</label>
-                                        <input type="time" id="job-time-start" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-semibold" required>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jam Mulai</label>
+                                        <input type="time" id="job-time-start" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Jam Selesai</label>
-                                        <input type="time" id="job-time-finish" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-sm font-semibold" required>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Jam Selesai</label>
+                                        <input type="time" id="job-time-finish" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-4">
+                                <div class="grid grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Shift Kerja</label>
-                                        <select id="job-shift" class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-slate-50 text-xs font-semibold" required>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Shift Kerja</label>
+                                        <select id="job-shift" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 bg-slate-50/50 text-xs font-semibold" required>
                                             <option value="Shift 1 (Pagi)">Shift 1</option>
                                             <option value="Shift 2 (Siang)">Shift 2</option>
                                             <option value="Shift 3 (Malam)">Shift 3</option>
                                         </select>
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Status Pekerjaan</label>
-                                        <select id="job-status" class="w-full px-3 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 text-xs font-semibold" required>
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Status Pekerjaan</label>
+                                        <select id="job-status" class="w-full px-3 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50/50 text-xs font-semibold" required>
                                             <option value="Selesai">Selesai ✅</option>
                                             <option value="Pending">Pending ⏳</option>
                                         </select>
@@ -273,37 +276,36 @@
 
                                 <!-- MULTI-PHOTO UPLOAD AREA -->
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Foto Pekerjaan (Maks. 3 Foto)</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Foto Pekerjaan (Maks. 3 Foto)</label>
                                     <div class="flex items-center justify-center w-full">
-                                        <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-slate-100/50 transition duration-150">
-                                            <div class="flex flex-col items-center justify-center pt-4 pb-4">
-                                                <i data-lucide="camera" class="w-6 h-6 text-slate-400 mb-1"></i>
-                                                <p class="text-xs text-slate-500 font-semibold">Klik untuk ambil/pilih foto</p>
-                                                <p class="text-[10px] text-slate-400">Format gambar (Maks. 3 foto)</p>
+                                        <label class="flex flex-col items-center justify-center w-full h-24 border-2 border-slate-200 border-dashed rounded-2xl cursor-pointer bg-slate-50/50 hover:bg-slate-100/50 transition duration-150">
+                                            <div class="flex flex-col items-center justify-center py-3">
+                                                <i data-lucide="camera" class="w-5 h-5 text-slate-400 mb-1"></i>
+                                                <p class="text-3xs text-slate-500 font-bold">Ketuk untuk Ambil / Pilih Foto</p>
                                             </div>
                                             <input type="file" id="job-photos-input" accept="image/*" multiple class="hidden" onchange="handlePhotoSelection(event)">
                                         </label>
                                     </div>
-                                    <div id="photo-preview-container" class="grid grid-cols-3 gap-2 mt-3"></div>
+                                    <div id="photo-preview-container" class="grid grid-cols-3 gap-2 mt-2"></div>
                                 </div>
 
-                                <div id="admin-only-fields" class="hidden p-4 bg-amber-50 rounded-2xl border border-amber-200 space-y-3">
-                                    <p class="text-xs font-bold text-amber-800 flex items-center space-x-1.5">
-                                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                                <div id="admin-only-fields" class="hidden p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200 space-y-2">
+                                    <p class="text-[10px] font-bold text-amber-800 flex items-center space-x-1">
+                                        <i data-lucide="shield-alert" class="w-3.5 h-3.5"></i>
                                         <span>Catatan Administratif (Khusus Admin)</span>
                                     </p>
                                     <div>
-                                        <textarea id="job-admin-notes" rows="2" placeholder="Catatan persetujuan, biaya sparepart, atau tindak lanjut..." class="w-full px-3 py-2 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-xs font-medium"></textarea>
+                                        <textarea id="job-admin-notes" rows="2" placeholder="Tulis catatan admin..." class="w-full px-3 py-2 rounded-xl border border-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white text-xs font-semibold"></textarea>
                                     </div>
                                 </div>
 
-                                <div class="pt-2 flex space-x-3">
-                                    <button type="button" id="btn-cancel" onclick="resetForm()" class="hidden flex-1 bg-slate-100 py-3.5 rounded-xl font-bold transition duration-200 text-xs">
+                                <div class="pt-2 flex space-x-2">
+                                    <button type="button" id="btn-cancel" onclick="resetForm()" class="hidden flex-1 bg-slate-100 hover:bg-slate-200 py-3 rounded-xl font-bold transition duration-200 text-xs">
                                         Batal
                                     </button>
-                                    <!-- DIPERBAIKI: Mengubah nama label tombol menjadi "Pekerjaan Selesai" -->
-                                    <button type="submit" id="btn-submit" class="flex-2 w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3.5 rounded-xl font-bold transition duration-200 shadow-lg text-xs flex items-center justify-center space-x-2 active:scale-95 transform">
-                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                    <!-- Label Tombol Diubah menjadi "Pekerjaan Selesai" -->
+                                    <button type="submit" id="btn-submit" class="flex-2 w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white py-3 rounded-xl font-extrabold transition duration-200 shadow-md shadow-indigo-600/10 text-xs flex items-center justify-center space-x-2 active:scale-95 transform">
+                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
                                         <span>Pekerjaan Selesai</span>
                                     </button>
                                 </div>
@@ -314,35 +316,35 @@
                     <!-- COLUMN 2-3: RIWAYAT & DETAIL -->
                     <div id="history-container-col" class="lg:col-span-3 space-y-6">
                         <!-- RINGKASAN DATA -->
-                        <div class="grid grid-cols-3 gap-4">
-                            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm text-center"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Log</p><h4 id="stat-total" class="text-2xl font-extrabold text-slate-800 mt-1">0</h4></div>
-                            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm text-center"><p class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Selesai</p><h4 id="stat-selesai" class="text-2xl font-extrabold text-emerald-600 mt-1">0</h4></div>
-                            <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm text-center"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">DB Mode</p><h4 id="stat-sync" class="text-xs font-extrabold mt-1 text-amber-600">Lokal</h4></div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-center"><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Total Log</p><h4 id="stat-total" class="text-lg sm:text-xl font-extrabold text-slate-800 mt-1">0</h4></div>
+                            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-center"><p class="text-[9px] font-bold text-emerald-600 uppercase tracking-widest">Selesai</p><h4 id="stat-selesai" class="text-lg sm:text-xl font-extrabold text-emerald-600 mt-1">0</h4></div>
+                            <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm text-center"><p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">DB Mode</p><h4 id="stat-sync" class="text-2xs font-extrabold mt-1 text-amber-600">Lokal</h4></div>
                         </div>
 
                         <!-- FILTERING -->
-                        <div class="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm space-y-4">
-                            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                                <div class="relative w-full md:w-80">
-                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-                                        <i data-lucide="search" class="w-4 h-4"></i>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                            <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                                <div class="relative w-full md:w-72">
+                                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                                        <i data-lucide="search" class="w-3.5 h-3.5"></i>
                                     </span>
-                                    <input type="text" id="filter-search" oninput="applyFilters()" placeholder="Cari area, teknisi, detail..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs bg-slate-50/50 font-medium">
+                                    <input type="text" id="filter-search" oninput="applyFilters()" placeholder="Cari area, teknisi, detail..." class="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs bg-slate-50/50 font-semibold transition">
                                 </div>
                                 
-                                <div class="flex flex-wrap gap-2 w-full md:w-auto justify-end">
-                                    <select id="filter-category" onchange="applyFilters()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-bold bg-slate-50 text-slate-600">
+                                <div class="flex gap-2 w-full md:w-auto justify-end">
+                                    <select id="filter-category" onchange="applyFilters()" class="flex-1 md:flex-initial px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-slate-50/50 text-slate-600">
                                         <option value="">Semua Kategori</option>
                                         <option value="Guest Room">Guest Room</option>
                                         <option value="Meeting Room">Meeting Room</option>
                                         <option value="Public Area">Public Area</option>
                                     </select>
-                                    <select id="filter-status" onchange="applyFilters()" class="px-3 py-2.5 rounded-xl border border-slate-200 text-xs font-bold bg-slate-50 text-slate-600">
+                                    <select id="filter-status" onchange="applyFilters()" class="flex-1 md:flex-initial px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-slate-50/50 text-slate-600">
                                         <option value="">Semua Status</option>
                                         <option value="Selesai">Selesai</option>
                                         <option value="Pending">Pending</option>
                                     </select>
-                                    <button onclick="clearFilters()" class="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition duration-200" title="Bersihkan Filter">
+                                    <button onclick="clearFilters()" class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition duration-200" title="Bersihkan Filter">
                                         <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
                                     </button>
                                 </div>
@@ -351,22 +353,22 @@
 
                         <!-- TABEL & MOBILE CARDS -->
                         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="p-4 sm:p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                 <h3 class="font-extrabold text-slate-800 text-sm flex items-center space-x-2">
                                     <i data-lucide="history" class="w-4.5 h-4.5 text-indigo-500"></i>
                                     <span>Riwayat Aktivitas Logbook</span>
                                 </h3>
-                                <div class="flex flex-wrap items-center gap-2">
-                                    <button id="btn-admin-add-job" onclick="toggleInputFormAdmin()" class="hidden text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-xs font-bold flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl transition active:scale-95 shadow-sm">
-                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                <div class="flex flex-wrap items-center gap-1.5">
+                                    <button id="btn-admin-add-job" onclick="toggleInputFormAdmin()" class="hidden text-white bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl transition active:scale-95 shadow-sm">
+                                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                         <span>Tambah Pekerjaan</span>
                                     </button>
-                                    <button id="btn-admin-export" onclick="exportToExcel()" class="hidden text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-bold flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl border border-emerald-200 transition active:scale-95">
-                                        <i data-lucide="download" class="w-4 h-4"></i>
+                                    <button id="btn-admin-export" onclick="exportToExcel()" class="hidden text-emerald-700 bg-emerald-50 hover:bg-emerald-100 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl border border-emerald-200 transition active:scale-95">
+                                        <i data-lucide="download" class="w-3.5 h-3.5"></i>
                                         <span>Ekspor Excel</span>
                                     </button>
-                                    <button onclick="syncDataWithSheets()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold flex items-center space-x-1.5 px-3.5 py-2.5 rounded-xl hover:bg-indigo-50 transition active:scale-95 border bg-white">
-                                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                    <button onclick="syncDataWithSheets()" class="text-indigo-600 hover:text-indigo-800 text-xs font-bold flex items-center space-x-1 px-3 py-2 rounded-xl hover:bg-indigo-50 transition active:scale-95 border bg-white">
+                                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5 animate-hover-spin"></i>
                                         <span>Sinkronisasi</span>
                                     </button>
                                 </div>
@@ -376,18 +378,18 @@
                             <div class="hidden md:block overflow-x-auto">
                                 <table class="w-full text-left border-collapse">
                                     <thead>
-                                        <tr class="bg-slate-50/80 text-slate-400 uppercase text-[10px] font-extrabold tracking-wider border-b border-slate-100">
-                                            <th class="py-4.5 px-6">Tanggal & Shift</th>
-                                            <th class="py-4.5 px-6">Bidang & Tipe</th>
-                                            <th class="py-4.5 px-6">Durasi Kerja</th>
-                                            <th class="py-4.5 px-6">Teknisi</th>
-                                            <th class="py-4.5 px-6">Kategori / Lokasi</th>
-                                            <th class="py-4.5 px-6">Detail Pekerjaan / Lampiran</th>
-                                            <th class="py-4.5 px-6 text-center">Status</th>
-                                            <th class="py-4.5 px-6 text-right">Aksi</th>
+                                        <tr class="bg-slate-50/80 text-slate-400 uppercase text-[9px] font-extrabold tracking-widest border-b border-slate-100">
+                                            <th class="py-4 px-5">Tanggal & Shift</th>
+                                            <th class="py-4 px-5">Bidang & Tipe</th>
+                                            <th class="py-4 px-5">Durasi Kerja</th>
+                                            <th class="py-4 px-5">Teknisi</th>
+                                            <th class="py-4 px-5">Kategori / Lokasi</th>
+                                            <th class="py-4 px-5">Detail Pekerjaan / Lampiran</th>
+                                            <th class="py-4 px-5 text-center">Status</th>
+                                            <th class="py-4 px-5 text-right">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="log-table-body" class="divide-y divide-slate-100 text-xs font-medium text-slate-600"></tbody>
+                                    <tbody id="log-table-body" class="divide-y divide-slate-100 text-xs font-semibold text-slate-600"></tbody>
                                 </table>
                             </div>
 
@@ -405,57 +407,57 @@
             </div>
 
             <!-- TAB PANEL 2: MANAGE USERS (ADMIN ONLY) -->
-            <div id="tab-content-users" class="hidden space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div id="tab-content-users" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <div class="lg:col-span-1">
-                        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100/80">
-                            <div class="flex items-center space-x-2.5 pb-4 mb-6 border-b border-slate-100">
+                        <div class="bg-white p-5 rounded-3xl shadow-sm border border-slate-100/80">
+                            <div class="flex items-center space-x-2 pb-4 mb-5 border-b border-slate-100">
                                 <div class="p-2 bg-indigo-50 text-indigo-600 rounded-xl">
-                                    <i data-lucide="user-plus" class="w-5 h-5"></i>
+                                    <i data-lucide="user-plus" class="w-4 h-4"></i>
                                 </div>
-                                <h2 id="user-form-title" class="text-base font-extrabold text-slate-800">Tambah Akses</h2>
+                                <h2 id="user-form-title" class="text-sm font-extrabold text-slate-800">Tambah Akses</h2>
                             </div>
                             
-                            <form id="user-form" onsubmit="submitUserForm(event)" class="space-y-5">
+                            <form id="user-form" onsubmit="submitUserForm(event)" class="space-y-4">
                                 <input type="hidden" id="user-edit-username" value="">
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nama Lengkap</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                             <i data-lucide="user" class="w-4 h-4"></i>
                                         </span>
-                                        <input type="text" id="user-name" placeholder="Nama Lengkap..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/80" required>
+                                        <input type="text" id="user-name" placeholder="Nama Lengkap..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/50" required>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Nama Pengguna (Username)</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Nama Pengguna (Username)</label>
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                             <i data-lucide="hash" class="w-4 h-4"></i>
                                         </span>
-                                        <input type="text" id="user-username" placeholder="Username..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/80" required>
+                                        <input type="text" id="user-username" placeholder="Username..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/50" required>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Kata Sandi</label>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Kata Sandi</label>
                                     <div class="relative">
-                                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
                                             <i data-lucide="key" class="w-4 h-4"></i>
                                         </span>
-                                        <input type="text" id="user-password" placeholder="Sandi..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/80" required>
+                                        <input type="text" id="user-password" placeholder="Sandi..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs font-semibold bg-slate-50/50" required>
                                     </div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Hak Akses</label>
-                                    <select id="user-role" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none bg-slate-50/80 text-xs font-semibold" required>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Hak Akses</label>
+                                    <select id="user-role" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none bg-slate-50/50 text-xs font-semibold" required>
                                         <option value="user">Teknisi (Hanya input & lihat)</option>
                                         <option value="admin">Administrator (Akses Penuh)</option>
                                     </select>
                                 </div>
-                                <div class="pt-2 flex space-x-3">
-                                    <button type="button" id="btn-user-cancel" onclick="resetUserForm()" class="hidden flex-1 bg-slate-100 py-3 rounded-xl font-bold text-xs">Batal</button>
-                                    <button type="submit" id="btn-user-submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 active:scale-95">
-                                        <i data-lucide="user-check" class="w-4 h-4"></i><span>Simpan</span>
+                                <div class="pt-2 flex space-x-2">
+                                    <button type="button" id="btn-user-cancel" onclick="resetUserForm()" class="hidden flex-1 bg-slate-100 py-2.5 rounded-xl font-bold text-xs">Batal</button>
+                                    <button type="submit" id="btn-user-submit" class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 active:scale-95 transition">
+                                        <i data-lucide="user-check" class="w-4 h-4"></i><span>Simpan User</span>
                                     </button>
                                 </div>
                             </form>
@@ -464,23 +466,23 @@
 
                     <div class="lg:col-span-2 space-y-6">
                         <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-                            <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+                            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between">
                                 <h3 class="font-extrabold text-slate-800 text-sm flex items-center space-x-2">
                                     <i data-lucide="shield" class="w-4.5 h-4.5 text-indigo-500"></i>
                                     <span>Akses Terdaftar</span>
                                 </h3>
                                 <span id="stat-total-users" class="bg-indigo-50 text-indigo-800 text-xs px-3 py-1 rounded-xl font-extrabold border border-indigo-100">0 Pengguna</span>
                             </div>
-                            <div id="users-cards-mobile" class="block md:hidden divide-y divide-slate-100"></div>
+                            <div id="users-cards-mobile" class="block md:hidden p-3 divide-y divide-slate-100"></div>
                             <div class="hidden md:block overflow-x-auto">
                                 <table class="w-full text-left border-collapse">
                                     <thead>
-                                        <tr class="bg-slate-50/80 text-slate-400 uppercase text-[10px] font-extrabold tracking-wider border-b border-slate-100">
-                                            <th class="py-4.5 px-6">Nama Lengkap</th>
-                                            <th class="py-4.5 px-6">Username</th>
-                                            <th class="py-4.5 px-6">Kata Sandi</th>
-                                            <th class="py-4.5 px-6">Hak Akses</th>
-                                            <th class="py-4.5 px-6 text-right">Aksi</th>
+                                        <tr class="bg-slate-50/80 text-slate-400 uppercase text-[9px] font-extrabold tracking-widest border-b border-slate-100">
+                                            <th class="py-4 px-5">Nama Lengkap</th>
+                                            <th class="py-4 px-5">Username</th>
+                                            <th class="py-4 px-5">Kata Sandi</th>
+                                            <th class="py-4 px-5">Hak Akses</th>
+                                            <th class="py-4 px-5 text-right">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="users-table-body" class="divide-y divide-slate-100 text-xs font-semibold text-slate-600"></tbody>
@@ -496,19 +498,23 @@
 
     <!-- MANUAL SETTING MODAL -->
     <div id="setup-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4">
-            <h3 class="font-bold text-slate-900">Pengaturan Google Apps Script</h3>
-            <input type="url" id="sheet-api-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-3 border rounded-xl text-xs font-mono bg-slate-50">
-            <div class="flex justify-end space-x-2">
-                <button onclick="toggleSetupModal(false)" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-200 rounded-xl">Batal</button>
-                <button onclick="saveSetupConfig()" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs">Simpan</button>
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-100">
+            <h3 class="font-extrabold text-slate-900 text-base flex items-center space-x-2">
+                <i data-lucide="settings" class="w-5 h-5 text-indigo-600"></i>
+                <span>Pengaturan Apps Script</span>
+            </h3>
+            <p class="text-xs text-slate-500 leading-relaxed">Masukkan tautan URL Web App Google Apps Script Anda (berakhiran <code class="bg-slate-150 px-1 py-0.5 rounded text-indigo-600 font-bold">/exec</code>) untuk mengaktifkan integrasi Google Sheets & Google Drive.</p>
+            <input type="url" id="sheet-api-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-3 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <div class="flex justify-end space-x-2 pt-2">
+                <button onclick="toggleSetupModal(false)" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition">Batal</button>
+                <button onclick="saveSetupConfig()" class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-5 py-2.5 rounded-xl font-bold text-xs shadow-md shadow-emerald-600/10 transition active:scale-95">Simpan</button>
             </div>
         </div>
     </div>
 
     <!-- CUSTOM CONFIRMATION MODAL -->
     <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 text-center">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 text-center border shadow-xl">
             <div class="mx-auto bg-red-100 text-red-600 w-12 h-12 rounded-full flex items-center justify-center shadow-inner">
                 <i data-lucide="alert-triangle" class="w-6 h-6"></i>
             </div>
@@ -517,23 +523,17 @@
                 <p id="confirm-message" class="text-xs text-slate-500 mt-2 font-medium">Tindakan ini tidak dapat dibatalkan.</p>
             </div>
             <div class="flex space-x-3 pt-2">
-                <button onclick="closeConfirmModal(false)" class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl">Batal</button>
-                <button id="btn-confirm-yes" class="flex-1 py-2.5 text-xs font-bold text-white bg-red-600 rounded-xl shadow-md">Hapus</button>
+                <button onclick="closeConfirmModal(false)" class="flex-1 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 rounded-xl transition hover:bg-slate-200">Batal</button>
+                <button id="btn-confirm-yes" class="flex-1 py-2.5 text-xs font-bold text-white bg-red-600 rounded-xl shadow-md transition hover:bg-red-755">Hapus</button>
             </div>
         </div>
     </div>
 
     <!-- LIGHTBOX MULTI-PHOTO VIEWER -->
     <div id="lightbox-modal" class="hidden fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex flex-col items-center justify-center p-4">
-        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white font-bold text-lg p-2.5">✕ Close</button>
-        <img id="lightbox-img" src="" class="max-w-full max-h-[80vh] rounded-lg shadow-2xl object-contain border border-slate-800">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white font-bold text-lg p-2.5 bg-white/10 rounded-full hover:bg-white/20 transition">✕ Close</button>
+        <img id="lightbox-img" src="" class="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain border border-white/10">
     </div>
-
-    <footer class="bg-white border-t border-slate-200/50 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center text-[11px] text-slate-400 font-semibold tracking-wide uppercase">
-            <p>&copy; 2026 Hotel Engineering Productivity System.</p>
-        </div>
-    </footer>
 
     <!-- APP BUSINESS LOGIC -->
     <script>
@@ -556,7 +556,7 @@
         function showAlert(msg, type) {
             const box = document.getElementById('alert-box');
             document.getElementById('alert-message').innerText = msg;
-            box.className = `mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-sm ${
+            box.className = `mb-6 p-4 rounded-2xl border flex items-start space-x-3 shadow-md transition-all duration-300 ${
                 type === 'success' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 
                 type === 'error' ? 'bg-red-50 text-red-800 border-red-200' : 
                 'bg-indigo-50 text-indigo-800 border-indigo-200'
@@ -570,15 +570,27 @@
             document.getElementById('alert-debug').classList.add('hidden');
         }
 
+        // Memperbarui UI status Sinkronisasi serta menyembunyikan/menampilkan banner database secara dinamis
         function updateSyncStatusUI(isS) {
             const statusText = document.getElementById('stat-sync');
             if (statusText) {
                 statusText.innerText = isS ? "Cloud" : "Lokal";
-                statusText.className = isS ? "text-xs font-extrabold text-emerald-600" : "text-xs font-extrabold text-amber-600";
+                statusText.className = isS ? "text-2xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100" : "text-2xs font-extrabold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100";
             }
             const bannerStatus = document.getElementById('banner-status-text');
             if (bannerStatus) {
-                bannerStatus.innerText = isS ? "Aplikasi Anda terhubung ke Google Sheets pusat." : "Aplikasi berjalan offline. Hubungkan ke Google Sheets untuk menyinkronkan data.";
+                bannerStatus.innerText = isS ? "Aplikasi Anda terhubung ke Google Sheets & Google Drive pusat secara real-time." : "Aplikasi berjalan offline. Hubungkan ke Google Sheets untuk menyinkronkan data.";
+            }
+
+            // MODIFIKASI: Sembunyikan banner jika database tersinkronisasi (Cloud), tunjukkan jika offline (Lokal)
+            const syncBanner = document.getElementById('sync-banner');
+            if (syncBanner) {
+                const activeTab = document.getElementById('tab-content-logbook').classList.contains('hidden') ? 'users' : 'logbook';
+                if (isS || activeTab === 'users') {
+                    syncBanner.classList.add('hidden');
+                } else {
+                    syncBanner.classList.remove('hidden');
+                }
             }
         }
 
@@ -654,7 +666,7 @@
             const usernameInput = document.getElementById('login-username').value.trim().toLowerCase();
             const passwordInput = document.getElementById('login-password').value;
 
-            // Membaca ulang usersData ter-update dari localStorage untuk menjamin user baru yang baru didaftarkan bisa langsung login
+            // Membaca ulang usersData ter-update dari localStorage untuk menjamin user baru bisa langsung login
             const activeUsers = JSON.parse(localStorage.getItem('he_users_local')) || usersData;
             const user = activeUsers.find(u => u.username === usernameInput);
 
@@ -737,8 +749,8 @@
         }
 
         function showSection(name) {
-            document.getElementById('login-section').className = name === 'login' ? 'max-w-md mx-auto my-12 bg-white rounded-3xl shadow-xl border' : 'hidden';
-            document.getElementById('dashboard-section').className = name === 'dashboard' ? 'space-y-8' : 'hidden';
+            document.getElementById('login-section').className = name === 'login' ? 'max-w-md mx-auto my-8 bg-white rounded-3xl shadow-xl border border-slate-100' : 'hidden';
+            document.getElementById('dashboard-section').className = name === 'dashboard' ? 'space-y-6' : 'hidden';
         }
 
         function switchTab(name) {
@@ -748,17 +760,24 @@
             const contentUsers = document.getElementById('tab-content-users');
 
             if (name === 'logbook') {
-                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
-                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
+                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
+                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
                 contentLogbook.classList.remove('hidden');
                 contentUsers.classList.add('hidden');
-                document.getElementById('sync-banner').classList.remove('hidden');
+                
+                // Cek status sinkronisasi aktif saat ini sebelum menampilkan banner di tab logbook
+                const isS = (document.getElementById('stat-sync').innerText === "Cloud");
+                if (isS) {
+                    document.getElementById('sync-banner').classList.add('hidden');
+                } else {
+                    document.getElementById('sync-banner').classList.remove('hidden');
+                }
             } else {
-                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
-                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
+                btnUsers.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 bg-indigo-50 text-indigo-700 shadow-sm border border-indigo-100";
+                btnLogbook.className = "flex-1 py-3 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 text-slate-500 hover:bg-slate-50";
                 contentLogbook.classList.add('hidden');
                 contentUsers.classList.remove('hidden');
-                document.getElementById('sync-banner').classList.add('hidden');
+                document.getElementById('sync-banner').classList.add('hidden'); // Sembunyikan banner di kelola user
                 renderUsersList();
             }
         }
@@ -766,7 +785,7 @@
         function selectCategory(cat) {
             activeCategory = cat;
             document.getElementById('job-category').value = cat;
-            ['cat-room', 'cat-meeting', 'cat-public'].forEach(id => document.getElementById(id).className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center border-slate-200 text-slate-600");
+            ['cat-room', 'cat-meeting', 'cat-public'].forEach(id => document.getElementById(id).className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center border-slate-200 text-slate-600 bg-white");
             let targetId = cat === 'Guest Room' ? 'cat-room' : cat === 'Meeting Room' ? 'cat-meeting' : 'cat-public';
             document.getElementById(targetId).className = "py-3 px-2 rounded-xl border text-[10px] font-bold text-center bg-indigo-50 border-indigo-500 text-indigo-700 ring-2 ring-indigo-500/15";
         }
@@ -810,10 +829,10 @@
             container.innerHTML = '';
             selectedPhotosBase64.forEach((base64, index) => {
                 const wrap = document.createElement('div');
-                wrap.className = "relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100";
+                wrap.className = "relative aspect-square rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm";
                 wrap.innerHTML = `
                     <img src="${base64}" class="w-full h-full object-cover">
-                    <button type="button" onclick="selectedPhotosBase64.splice(${index}, 1); renderPhotoPreviews();" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md">✕</button>
+                    <button type="button" onclick="selectedPhotosBase64.splice(${index}, 1); renderPhotoPreviews();" class="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 shadow-md w-5 h-5 flex items-center justify-center text-xs">✕</button>
                 `;
                 container.appendChild(wrap);
             });
@@ -839,7 +858,7 @@
                 return;
             }
 
-            // DIPERBAIKI: Logika deteksi perubahan teknisi pengerjaan saat mengedit data Pending milik user lain
+            // Logika deteksi perubahan teknisi pengerjaan saat mengedit data Pending milik user lain
             let originalTeknisi = currentUserName;
             if (editId) {
                 const idx = logbookData.findIndex(item => item.id === editId);
@@ -887,7 +906,7 @@
             }
         }
 
-        // DIPERBAIKI: Memberikan izin edit kepada user biasa khusus untuk pekerjaan yang masih berstatus "Pending"
+        // Memberikan izin edit kepada user biasa khusus untuk pekerjaan yang masih berstatus "Pending"
         function prepareEdit(id) {
             const log = logbookData.find(item => item.id === id); if (!log) return;
             
@@ -951,23 +970,7 @@
             });
         }
 
-        // Reset form input
-        function resetForm() {
-            document.getElementById('logbook-form').reset();
-            document.getElementById('edit-id').value = '';
-            selectedPhotosBase64 = []; renderPhotoPreviews();
-            setTodayDate();
-            if (currentRole === 'admin') toggleInputFormAdmin();
-        }
-
-        function openLightbox(url) {
-            document.getElementById('lightbox-img').src = url;
-            document.getElementById('lightbox-modal').classList.remove('hidden');
-        }
-        function closeLightbox() { document.getElementById('lightbox-modal').classList.add('hidden'); }
-
         // --- SISTEM SYNC TERBARU MENGGUNAKAN FORM DATA (BEBAS BLOKIR CORS) ---
-        // DIPERBAIKI: Ditambahkan indikasi visual animasi progres loading sync pada tombol Pekerjaan Selesai
         async function syncDataWithSheets(isSilent = false) {
             if (!googleSheetsURL) {
                 if (!isSilent) showAlert('Konfigurasi URL Google Sheets belum disetel!', 'error');
@@ -1045,7 +1048,7 @@
                     }
                     renderData();
                     updateSyncStatusUI(true);
-                    if (!isSilent) showAlert('Sinkronisasi Google Sheets Berhasil!', 'success');
+                    if (!isSilent) showAlert('Sinkronisasi Google Sheets & Google Drive Berhasil!', 'success');
                 } else {
                     if (!isSilent) showAlert('Gagal menyinkronkan data: ' + res.message, 'error');
                 }
@@ -1143,14 +1146,14 @@
                 `;
 
                 mobileContainer.innerHTML += `
-                    <div class="p-4 bg-white rounded-2xl border mb-2 flex justify-between items-center text-xs">
+                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-150 flex justify-between items-center text-xs mb-3 shadow-sm shadow-slate-200/50">
                         <div>
                             <p class="font-bold text-slate-800">${u.name}</p>
-                            <p class="text-3xs text-slate-400">User: ${u.username} | Pass: ${u.password}</p>
+                            <p class="text-[10px] text-slate-500 mt-1">User: <code class="bg-white px-1.5 py-0.5 rounded border font-mono">${u.username}</code> | Pass: <code class="bg-white px-1.5 py-0.5 rounded border font-mono">${u.password}</code></p>
                         </div>
                         <div class="flex items-center space-x-2">
                             <span class="px-2 py-0.5 rounded text-[9px] font-bold ${u.role==='admin'?'bg-purple-100 text-purple-800':'bg-blue-100 text-blue-800'}">${u.role.toUpperCase()}</span>
-                            <button onclick="deleteUser('${u.username}')" class="text-red-500 font-bold">Hapus</button>
+                            <button onclick="deleteUser('${u.username}')" class="text-red-500 font-bold hover:bg-red-50 p-1.5 rounded-lg transition">Hapus</button>
                         </div>
                     </div>
                 `;
@@ -1225,7 +1228,7 @@
                     let pList = item.photos || [];
                     let pGHtml = pList.map(b => `<img src="${b}" onclick="openLightbox('${b}')" class="w-10 h-10 object-cover border rounded-lg cursor-pointer transform hover:scale-105 transition shadow-sm">`).join(' ');
 
-                    // DIPERBAIKI: Memberikan tombol Aksi dinamis (Teknisi biasa hanya punya tombol edit jika berstatus "Pending")
+                    // Memberikan tombol Aksi dinamis (Teknisi biasa hanya punya tombol edit jika berstatus "Pending")
                     let actionHtml = '';
                     if (currentRole === 'admin') {
                         actionHtml = `
@@ -1241,60 +1244,68 @@
                     }
 
                     tbody.innerHTML += `
-                        <tr class="border-b hover:bg-slate-50">
-                            <td class="p-4 font-bold">${item.tanggal}<br><span class="text-3xs text-slate-400 font-bold uppercase tracking-wider">${item.shift}</span></td>
-                            <td class="p-4 font-bold text-slate-700">${item.specialty || 'Umum'}<br><span class="inline-flex mt-0.5 text-[9px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">${item.maintenance_type || 'Corrective'}</span></td>
-                            <td class="p-4 text-slate-600 font-bold">${item.time_start || '--:--'} s/d ${item.time_finish || '--:--'}</td>
-                            <td class="p-4 text-slate-600 font-bold">${item.teknisi}</td>
-                            <td class="p-4"><span class="inline-flex items-center space-x-1 text-[10px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span><p class="text-xs font-bold text-slate-700 mt-1.5">${item.area}</p></td>
-                            <td class="p-4 max-w-xs"><p class="text-xs font-medium">${item.detail}</p><div class="flex gap-1.5 mt-2.5">${pGHtml}</div></td>
-                            <td class="p-4 text-center"><span class="px-2.5 py-1 text-2xs font-extrabold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-250':'bg-amber-50 text-amber-800 border-amber-250'}">${item.status}</span></td>
+                        <tr class="border-b hover:bg-slate-50/50 transition">
+                            <td class="p-4 font-bold text-slate-800">${item.tanggal}<br><span class="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">${item.shift}</span></td>
+                            <td class="p-4 font-bold text-slate-700">${item.specialty || 'Umum'}<br><span class="inline-flex mt-1 text-[9px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">${item.maintenance_type || 'Corrective'}</span></td>
+                            <td class="p-4 text-slate-600 font-semibold">${item.time_start || '--:--'} s/d ${item.time_finish || '--:--'}</td>
+                            <td class="p-4 text-slate-600 font-semibold">${item.teknisi}</td>
+                            <td class="p-4"><span class="inline-flex items-center space-x-1 text-[9px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span><p class="text-xs font-bold text-slate-800 mt-1.5">${item.area}</p></td>
+                            <td class="p-4 max-w-xs"><p class="text-xs font-medium leading-relaxed">${item.detail}</p><div class="flex gap-1.5 mt-2">${pGHtml}</div></td>
+                            <td class="p-4 text-center"><span class="px-2.5 py-1 text-[10px] font-bold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-100':'bg-amber-50 text-amber-800 border-amber-100'}">${item.status}</span></td>
                             <td class="p-4 text-right">${actionHtml}</td>
                         </tr>
                     `;
                     
-                    // Aksi untuk Layout Mobile harian
+                    // Aksi untuk Layout Mobile harian (DIPROPOSIONALKAN)
                     let mobileActionHtml = '';
                     if (currentRole === 'admin') {
                         mobileActionHtml = `
-                            <div class="flex justify-end space-x-2 pt-2 border-t">
-                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-3 py-1 bg-indigo-50 rounded-lg">Edit</button>
-                                <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-3 py-1 bg-red-50 rounded-lg">Hapus</button>
+                            <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition">
+                                    <i data-lucide="edit" class="w-3.5 h-3.5"></i><span>Edit</span>
+                                </button>
+                                <button onclick="deletePekerjaan('${item.id}')" class="text-red-600 font-bold px-4 py-2 bg-red-50 rounded-xl hover:bg-red-100 text-xs flex items-center space-x-1.5 transition">
+                                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i><span>Hapus</span>
+                                </button>
                             </div>
                         `;
                     } else if (item.status === 'Pending') {
                         mobileActionHtml = `
-                            <div class="flex justify-end space-x-2 pt-2 border-t">
-                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-3 py-1 bg-indigo-50 rounded-lg">Edit</button>
+                            <div class="flex justify-end space-x-2 pt-3 border-t border-slate-100">
+                                <button onclick="prepareEdit('${item.id}')" class="text-indigo-600 font-bold px-4 py-2 bg-indigo-50 rounded-xl hover:bg-indigo-100 text-xs flex items-center space-x-1.5 transition">
+                                    <i data-lucide="edit" class="w-3.5 h-3.5"></i><span>Edit Laporan</span>
+                                </button>
                             </div>
                         `;
                     }
 
                     mobileContainer.innerHTML += `
-                        <div class="p-5 space-y-3.5 bg-white rounded-3xl border border-slate-150/60 shadow-sm mb-3">
+                        <div class="p-4 space-y-3 bg-white rounded-2xl border border-slate-150 shadow-sm mb-3">
                             <div class="flex justify-between items-start">
                                 <div>
-                                    <span class="inline-flex items-center space-x-1 text-[10px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span>
-                                    <h4 class="font-bold text-slate-800 text-sm mt-1.5">${item.area}</h4>
+                                    <span class="inline-flex items-center text-[9px] text-indigo-800 bg-indigo-50 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold uppercase">${item.category}</span>
+                                    <h4 class="font-extrabold text-slate-800 text-sm sm:text-base mt-1.5">${item.area}</h4>
                                 </div>
-                                <span class="px-2.5 py-0.5 text-3xs font-extrabold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-250':'bg-amber-50 text-amber-800 border-amber-250'}">${item.status}</span>
+                                <span class="px-2.5 py-0.5 text-[10px] font-bold rounded-full border ${item.status==='Selesai'?'bg-emerald-50 text-emerald-800 border-emerald-100':'bg-amber-50 text-amber-800 border-amber-100'}">${item.status}</span>
                             </div>
-                            <div class="flex flex-wrap gap-2 text-3xs font-bold uppercase tracking-wider">
-                                <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">Bidang: ${item.specialty || 'Umum'}</span>
+                            <div class="flex flex-wrap gap-1.5 text-[9px] font-bold uppercase tracking-wider">
+                                <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">Spesialis: ${item.specialty || 'Umum'}</span>
                                 <span class="px-2 py-1 rounded-lg bg-slate-100 text-slate-600">Tipe: ${item.maintenance_type || 'Corrective'}</span>
                             </div>
-                            <p class="text-xs text-slate-600 leading-relaxed">${item.detail}</p>
-                            <div class="flex gap-2">${pGHtml}</div>
-                            <div class="bg-slate-50 border p-2 rounded-2xl text-3xs flex justify-between items-center text-slate-500 font-bold">
-                                <span>Mulai: ${item.time_start || '--:--'} | Selesai: ${item.time_finish || '--:--'}</span>
+                            <p class="text-xs text-slate-600 leading-relaxed font-medium">${item.detail}</p>
+                            <div class="flex gap-2 py-1 overflow-x-auto">${pGHtml}</div>
+                            <div class="bg-slate-50/50 border p-2 rounded-xl text-[10px] flex justify-between items-center text-slate-500 font-bold">
+                                <span>Jam Kerja: ${item.time_start || '--:--'} s/d ${item.time_finish || '--:--'}</span>
+                                <span>Shift: ${item.shift}</span>
                             </div>
-                            <div class="flex justify-between items-center text-3xs text-slate-400 font-bold uppercase tracking-wide">
-                                <span>${item.teknisi}</span><span>${item.tanggal}</span>
+                            <div class="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wide">
+                                <span>Oleh: ${item.teknisi}</span><span>${item.tanggal}</span>
                             </div>
                             ${mobileActionHtml}
                         </div>
                     `;
                 });
+                lucide.createIcons(); // Re-render icons inside new items
             }
             document.getElementById('stat-total').innerText = logbookData.length;
             document.getElementById('stat-selesai').innerText = logbookData.filter(i=>i.status==='Selesai').length;
